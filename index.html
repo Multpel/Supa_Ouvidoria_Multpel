@@ -3,222 +3,73 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ouvidoria.multpelatacado.com.br — Canal de Conduta</title>
+<title>Canal de Conduta — Multpel</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-<style>
-/* === RESET & BASE === */
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html { -webkit-text-size-adjust: none; text-size-adjust: none; -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; scroll-behavior: smooth; }
-body { min-height: 100dvh; font-family: 'Inter', 'Helvetica Neue', sans-serif; font-size: 16px; line-height: 1.6; color: #1a1a1a; background: #f5f5f7; }
-img { display: block; max-width: 100%; height: auto; }
-input, button, textarea, select { font: inherit; color: inherit; }
-:focus-visible { outline: 2px solid #7c3aed; outline-offset: 2px; border-radius: 6px; }
-
-/* === LAYOUT === */
-.page { max-width: 720px; margin: 0 auto; padding: 24px 16px 64px; }
-@media (min-width: 768px) { .page { padding: 40px 24px 80px; } }
-
-/* === HEADER === */
-.header-card {
-  background: #fff;
-  border-radius: 12px;
-  padding: 28px 24px;
-  margin-bottom: 16px;
-  border-top: 4px solid #7c3aed;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.06);
-}
-.header-card h1 {
-  font-size: 28px;
-  font-weight: 600;
-  color: #1a1a1a;
-  margin-bottom: 16px;
-  line-height: 1.2;
-}
-.header-card p {
-  font-size: 15px;
-  color: #444;
-  margin-bottom: 10px;
-  line-height: 1.6;
-}
-.header-card p:last-child { margin-bottom: 0; }
-
-/* === FORM CARDS === */
-.form-card {
-  background: #fff;
-  border-radius: 12px;
-  padding: 24px;
-  margin-bottom: 16px;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.06);
-}
-.form-card label {
-  display: block;
-  font-size: 15px;
-  font-weight: 600;
-  color: #1a1a1a;
-  margin-bottom: 12px;
-}
-.form-card label .required { color: #dc2626; margin-left: 2px; }
-
-/* === RADIO GROUPS === */
-.radio-group { display: flex; flex-direction: column; gap: 10px; }
-.radio-option {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 10px 12px;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: background 150ms ease;
-}
-.radio-option:hover { background: #f3f0ff; }
-.radio-option input[type="radio"] {
-  width: 20px;
-  height: 20px;
-  accent-color: #7c3aed;
-  flex-shrink: 0;
-  cursor: pointer;
-}
-.radio-option span { font-size: 15px; color: #333; }
-
-/* === INPUTS === */
-.text-input, .textarea-input, .date-input {
-  width: 100%;
-  padding: 12px 14px;
-  border: 1px solid #d1d5db;
-  border-radius: 8px;
-  font-size: 15px;
-  background: #fff;
-  transition: border-color 150ms ease, box-shadow 150ms ease;
-}
-.text-input:focus, .textarea-input:focus, .date-input:focus {
-  border-color: #7c3aed;
-  box-shadow: 0 0 0 3px rgba(124,58,237,0.12);
-  outline: none;
-}
-.text-input::placeholder, .textarea-input::placeholder { color: #9ca3af; }
-.textarea-input { min-height: 120px; resize: vertical; line-height: 1.6; }
-
-/* === FILE UPLOAD === */
-.file-upload {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 10px 16px;
-  border: 1px solid #d1d5db;
-  border-radius: 8px;
-  background: #fff;
-  cursor: pointer;
-  font-size: 14px;
-  color: #444;
-  transition: border-color 150ms ease, background 150ms ease;
-}
-.file-upload:hover { border-color: #7c3aed; background: #faf5ff; }
-.file-upload input[type="file"] { display: none; }
-.file-upload svg { width: 18px; height: 18px; color: #6b7280; }
-
-/* === OTHER TEXT INPUT INLINE === */
-.other-input {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 8px 12px;
-}
-.other-input input {
-  flex: 1;
-  border: none;
-  border-bottom: 1px dashed #d1d5db;
-  padding: 6px 0;
-  font-size: 15px;
-  background: transparent;
-}
-.other-input input:focus {
-  outline: none;
-  border-bottom-color: #7c3aed;
-}
-
-/* === ANONYMOUS NOTICE === */
-.anon-notice {
-  background: #faf5ff;
-  border-left: 3px solid #7c3aed;
-  border-radius: 0 8px 8px 0;
-  padding: 16px 20px;
-  margin-bottom: 16px;
-  font-size: 14px;
-  color: #4b5563;
-  line-height: 1.6;
-}
-.anon-notice strong { color: #1a1a1a; display: block; margin-bottom: 6px; }
-
-/* === SUBMIT BUTTON === */
-.submit-btn {
-  display: block;
-  width: 100%;
-  padding: 14px 24px;
-  background: #7c3aed;
-  color: #fff;
-  font-size: 16px;
-  font-weight: 600;
-  border: none;
-  border-radius: 10px;
-  cursor: pointer;
-  transition: background 150ms ease, transform 100ms ease;
-  margin-top: 8px;
-}
-.submit-btn:hover { background: #6d28d9; }
-.submit-btn:active { transform: scale(0.98); }
-
-/* === FOOTER === */
-.footer {
-  text-align: center;
-  padding: 24px;
-  font-size: 12px;
-  color: #9ca3af;
-}
-
-/* === HELPER TEXT === */
-.helper-text {
-  font-size: 13px;
-  color: #6b7280;
-  margin-top: 6px;
-  line-height: 1.5;
-}
-
-/* === STEPS INDICATOR === */
-.steps-bar {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  margin-bottom: 24px;
-  padding: 0 8px;
-}
-.step-dot {
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  background: #d1d5db;
-  transition: background 200ms ease;
-}
-.step-dot.active { background: #7c3aed; }
-.step-line {
-  width: 24px;
-  height: 2px;
-  background: #d1d5db;
-  border-radius: 1px;
-}
-</style>
-
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-  const SUPABASE_URL = 'https://wbghfgtgamhbvoqpompi.supabase.co';
-  const SUPABASE_KEY = 'sb_publishable_PxN-7QzQxMlrmUpK0mX9-w_N7m7IiuT';
-  const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+  const db = window.supabase.createClient(
+    'https://wbghfgtgamhbvoqpompi.supabase.co',
+    'sb_publishable_PxN-7QzQxMlrmUpK0mX9-w_N7m7IiuT'
+  );
 </script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:none;text-size-adjust:none;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;scroll-behavior:smooth}
+body{min-height:100dvh;font-family:'Inter','Helvetica Neue',sans-serif;font-size:16px;line-height:1.6;color:#1a1a1a;background:#f5f5f7}
+img{display:block;max-width:100%;height:auto}
+input,button,textarea,select{font:inherit;color:inherit}
+:focus-visible{outline:2px solid #7c3aed;outline-offset:2px;border-radius:6px}
+
+.page{max-width:720px;margin:0 auto;padding:24px 16px 64px}
+@media(min-width:768px){.page{padding:40px 24px 80px}}
+
+.header-card{background:#fff;border-radius:12px;padding:28px 24px;margin-bottom:16px;border-top:4px solid #7c3aed;box-shadow:0 1px 3px rgba(0,0,0,0.06)}
+.header-card h1{font-size:26px;font-weight:700;color:#1a1a1a;margin-bottom:16px;line-height:1.2}
+.header-card p{font-size:15px;color:#444;margin-bottom:10px;line-height:1.6}
+.header-card p:last-child{margin-bottom:0}
+
+.form-card{background:#fff;border-radius:12px;padding:24px;margin-bottom:16px;box-shadow:0 1px 3px rgba(0,0,0,0.06)}
+.form-card>label{display:block;font-size:15px;font-weight:600;color:#1a1a1a;margin-bottom:12px}
+.required{color:#dc2626;margin-left:2px}
+
+.radio-group{display:flex;flex-direction:column;gap:10px}
+.radio-option{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:8px;cursor:pointer;transition:background 150ms ease}
+.radio-option:hover{background:#f3f0ff}
+.radio-option input[type="radio"]{width:20px;height:20px;accent-color:#7c3aed;flex-shrink:0;cursor:pointer}
+.radio-option span{font-size:15px;color:#333}
+
+.text-input,.textarea-input,.date-input{width:100%;padding:12px 14px;border:1px solid #d1d5db;border-radius:8px;font-size:15px;background:#fff;transition:border-color 150ms ease,box-shadow 150ms ease}
+.text-input:focus,.textarea-input:focus,.date-input:focus{border-color:#7c3aed;box-shadow:0 0 0 3px rgba(124,58,237,0.12);outline:none}
+.text-input::placeholder,.textarea-input::placeholder{color:#9ca3af}
+.textarea-input{min-height:120px;resize:vertical;line-height:1.6}
+
+.file-upload{display:inline-flex;align-items:center;gap:8px;padding:10px 16px;border:1px solid #d1d5db;border-radius:8px;background:#fff;cursor:pointer;font-size:14px;color:#444;transition:border-color 150ms ease,background 150ms ease}
+.file-upload:hover{border-color:#7c3aed;background:#faf5ff}
+.file-upload input[type="file"]{display:none}
+
+.other-input{display:flex;align-items:center;gap:10px;padding:8px 12px}
+.other-input input[type="text"]{flex:1;border:none;border-bottom:1px dashed #d1d5db;padding:6px 0;font-size:15px;background:transparent}
+.other-input input[type="text"]:focus{outline:none;border-bottom-color:#7c3aed}
+
+.anon-notice{background:#faf5ff;border-left:3px solid #7c3aed;border-radius:0 8px 8px 0;padding:16px 20px;margin-bottom:16px;font-size:14px;color:#4b5563;line-height:1.6}
+.anon-notice strong{color:#1a1a1a;display:block;margin-bottom:6px}
+
+.submit-btn{display:block;width:100%;padding:14px 24px;background:#7c3aed;color:#fff;font-size:16px;font-weight:600;border:none;border-radius:10px;cursor:pointer;transition:background 150ms ease,transform 100ms ease;margin-top:8px}
+.submit-btn:hover{background:#6d28d9}
+.submit-btn:active{transform:scale(0.98)}
+.submit-btn:disabled{background:#a78bfa;cursor:not-allowed}
+
+.helper-text{font-size:13px;color:#6b7280;margin-top:6px;line-height:1.5}
+
+.msg-success{background:#f0fdf4;border:1px solid #86efac;border-left:4px solid #16a34a;border-radius:0 10px 10px 0;padding:20px 24px;margin-bottom:20px;font-size:15px;color:#15803d;line-height:1.6}
+.msg-error{background:#fff1f2;border:1px solid #fca5a5;border-left:4px solid #dc2626;border-radius:0 10px 10px 0;padding:16px 20px;margin-bottom:20px;font-size:14px;color:#dc2626}
+
+.footer{text-align:center;padding:24px;font-size:12px;color:#9ca3af}
+</style>
 </head>
 <body>
-
 <div class="page">
 
   <!-- HEADER -->
@@ -229,314 +80,226 @@ input, button, textarea, select { font: inherit; color: inherit; }
     <p>Preencha os campos do formulário da maneira mais completa e detalhada possível.</p>
   </div>
 
-  <form id="condutaForm" action="#" method="POST" enctype="multipart/form-data">
+  <!-- MENSAGEM DE RETORNO -->
+  <div id="form-message" style="display:none"></div>
 
-    <!-- STEP 1: IDENTIFICAÇÃO (OPCIONAL) -->
+  <form id="condutaForm">
+
+    <!-- IDENTIFICAÇÃO -->
     <div class="anon-notice">
       <strong>A partir de agora sua denúncia é anônima</strong>
       Caso deseje se identificar, preencha seu nome e endereço de e-mail no campo abaixo. Ressaltamos que no caso de denúncia anônima não é possível acompanhamento.
     </div>
-
     <div class="form-card">
       <label for="identificacao">Identificação (opcional)</label>
       <input type="text" id="identificacao" name="identificacao" class="text-input" placeholder="Nome e e-mail (opcional)">
     </div>
 
-    <!-- STEP 2: NATUREZA DO INFORMANTE -->
+    <!-- NATUREZA -->
     <div class="form-card">
       <label>Natureza do informante da denúncia</label>
       <div class="radio-group">
-        <label class="radio-option">
-          <input type="radio" name="natureza" value="cliente" required>
-          <span>Cliente</span>
-        </label>
-        <label class="radio-option">
-          <input type="radio" name="natureza" value="fornecedor">
-          <span>Fornecedor</span>
-        </label>
-        <label class="radio-option">
-          <input type="radio" name="natureza" value="funcionario">
-          <span>Funcionário</span>
-        </label>
+        <label class="radio-option"><input type="radio" name="natureza" value="cliente"><span>Cliente</span></label>
+        <label class="radio-option"><input type="radio" name="natureza" value="fornecedor"><span>Fornecedor</span></label>
+        <label class="radio-option"><input type="radio" name="natureza" value="funcionario"><span>Funcionário</span></label>
       </div>
     </div>
 
-    <!-- STEP 3: TIPO DE DENÚNCIA -->
+    <!-- TIPO DE DENÚNCIA -->
     <div class="form-card">
       <label>Tipo de Denúncia <span class="required">*</span></label>
       <div class="radio-group">
-        <label class="radio-option">
-          <input type="radio" name="tipo_denuncia" value="assedio_moral" required>
-          <span>Assédio Moral</span>
-        </label>
-        <label class="radio-option">
-          <input type="radio" name="tipo_denuncia" value="assedio_sexual">
-          <span>Assédio Sexual</span>
-        </label>
-        <label class="radio-option">
-          <input type="radio" name="tipo_denuncia" value="discriminacao">
-          <span>Discriminação</span>
-        </label>
-        <label class="radio-option">
-          <input type="radio" name="tipo_denuncia" value="violencia">
-          <span>Violência</span>
-        </label>
-        <label class="radio-option">
-          <input type="radio" name="tipo_denuncia" value="fraude">
-          <span>Fraude</span>
-        </label>
-        <label class="radio-option">
-          <input type="radio" name="tipo_denuncia" value="conduta_antietica">
-          <span>Conduta Antiética</span>
-        </label>
+        <label class="radio-option"><input type="radio" name="tipo_denuncia" value="assedio_moral"><span>Assédio Moral</span></label>
+        <label class="radio-option"><input type="radio" name="tipo_denuncia" value="assedio_sexual"><span>Assédio Sexual</span></label>
+        <label class="radio-option"><input type="radio" name="tipo_denuncia" value="discriminacao"><span>Discriminação</span></label>
+        <label class="radio-option"><input type="radio" name="tipo_denuncia" value="violencia"><span>Violência</span></label>
+        <label class="radio-option"><input type="radio" name="tipo_denuncia" value="fraude"><span>Fraude</span></label>
+        <label class="radio-option"><input type="radio" name="tipo_denuncia" value="conduta_antietica"><span>Conduta Antiética</span></label>
         <label class="radio-option other-input">
           <input type="radio" name="tipo_denuncia" value="outro">
           <span>Outro:</span>
-          <input type="text" name="tipo_denuncia_outro" placeholder="Especifique">
+          <input type="text" id="tipo_outro" placeholder="Especifique">
         </label>
       </div>
     </div>
 
-    <!-- STEP 4: DESCRIÇÃO DO OCORRIDO -->
+    <!-- DESCRIÇÃO -->
     <div class="form-card">
-      <label for="descricao">Descrição do ocorrido</label>
+      <label for="descricao">Descrição do ocorrido <span class="required">*</span></label>
       <p class="helper-text">Quanto mais detalhada forem as informações, maiores serão as chances de se comprovar os fatos alegados. O envio de provas, evidências ou indícios da irregularidade também facilita a apuração.</p>
-      <textarea id="descricao" name="descricao" class="textarea-input" placeholder="Descreva o ocorrido com o máximo de detalhes..." required></textarea>
+      <textarea id="descricao" name="descricao" class="textarea-input" placeholder="Descreva o ocorrido com o máximo de detalhes..."></textarea>
     </div>
 
-    <!-- STEP 5: LOCAL / SETOR -->
+    <!-- LOCAL / SETOR -->
     <div class="form-card">
-      <label>Local / Setor</label>
+      <label>Local / Setor <span class="required">*</span></label>
       <div class="radio-group">
-        <label class="radio-option">
-          <input type="radio" name="local" value="administrativo" required>
-          <span>Administrativo</span>
-        </label>
-        <label class="radio-option">
-          <input type="radio" name="local" value="balcao_telemarketing">
-          <span>Balcão / Telemarketing</span>
-        </label>
-        <label class="radio-option">
-          <input type="radio" name="local" value="comercial_externo">
-          <span>Comercial / Externo</span>
-        </label>
-        <label class="radio-option">
-          <input type="radio" name="local" value="encopel_am">
-          <span>Encopel (A &amp; M)</span>
-        </label>
-        <label class="radio-option">
-          <input type="radio" name="local" value="encopel_ac">
-          <span>Encopel (AC)</span>
-        </label>
-        <label class="radio-option">
-          <input type="radio" name="local" value="entrega">
-          <span>Entrega</span>
-        </label>
-        <label class="radio-option">
-          <input type="radio" name="local" value="expedicao_noturno">
-          <span>Expedição (Noturno)</span>
-        </label>
-        <label class="radio-option">
-          <input type="radio" name="local" value="industria">
-          <span>Indústria</span>
-        </label>
-        <label class="radio-option">
-          <input type="radio" name="local" value="recebimento">
-          <span>Recebimento</span>
-        </label>
+        <label class="radio-option"><input type="radio" name="local" value="administrativo"><span>Administrativo</span></label>
+        <label class="radio-option"><input type="radio" name="local" value="balcao_telemarketing"><span>Balcão / Telemarketing</span></label>
+        <label class="radio-option"><input type="radio" name="local" value="comercial_externo"><span>Comercial / Externo</span></label>
+        <label class="radio-option"><input type="radio" name="local" value="encopel_am"><span>Encopel (A &amp; M)</span></label>
+        <label class="radio-option"><input type="radio" name="local" value="encopel_ac"><span>Encopel (AC)</span></label>
+        <label class="radio-option"><input type="radio" name="local" value="entrega"><span>Entrega</span></label>
+        <label class="radio-option"><input type="radio" name="local" value="expedicao_noturno"><span>Expedição (Noturno)</span></label>
+        <label class="radio-option"><input type="radio" name="local" value="industria"><span>Indústria</span></label>
+        <label class="radio-option"><input type="radio" name="local" value="recebimento"><span>Recebimento</span></label>
         <label class="radio-option other-input">
           <input type="radio" name="local" value="outro">
           <span>Outro:</span>
-          <input type="text" name="local_outro" placeholder="Especifique">
+          <input type="text" id="local_outro" placeholder="Especifique">
         </label>
       </div>
     </div>
 
-    <!-- STEP 6: DATA APROXIMADA -->
+    <!-- DATA -->
     <div class="form-card">
       <label for="data_fato">Data aproximada do fato</label>
-      <input type="date" id="data_fato" name="data_fato" class="date-input" required>
+      <input type="date" id="data_fato" class="date-input">
     </div>
 
-    <!-- STEP 7: PESSOAS ENVOLVIDAS -->
+    <!-- PESSOAS ENVOLVIDAS -->
     <div class="form-card">
       <label for="pessoas_envolvidas">Pessoas envolvidas</label>
-      <input type="text" id="pessoas_envolvidas" name="pessoas_envolvidas" class="text-input" placeholder="Nome das pessoas envolvidas">
+      <input type="text" id="pessoas_envolvidas" class="text-input" placeholder="Nome das pessoas envolvidas">
     </div>
 
-    <!-- STEP 8: TESTEMUNHAS -->
+    <!-- TESTEMUNHAS -->
     <div class="form-card">
       <label for="testemunhas">Existem testemunhas? Quem?</label>
-      <textarea id="testemunhas" name="testemunhas" class="textarea-input" placeholder="Descreva as testemunhas e o que presenciaram..."></textarea>
+      <textarea id="testemunhas" class="textarea-input" placeholder="Descreva as testemunhas e o que presenciaram..."></textarea>
     </div>
 
-    <!-- STEP 9: PROVAS -->
+    <!-- PROVAS -->
     <div class="form-card">
       <label for="provas">Existem provas? Quais?</label>
-      <textarea id="provas" name="provas" class="textarea-input" placeholder="Descreva as provas disponíveis (e-mails, mensagens, documentos, fotos, etc.)"></textarea>
+      <textarea id="provas" class="textarea-input" placeholder="Descreva as provas disponíveis (e-mails, mensagens, documentos, fotos, etc.)"></textarea>
     </div>
 
-    <!-- STEP 10: ANEXO -->
+    <!-- ANEXO -->
     <div class="form-card">
       <label>Deseja enviar alguma evidência como anexo?</label>
       <label class="file-upload">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-          <polyline points="17 8 12 3 7 8"/>
-          <line x1="12" y1="3" x2="12" y2="15"/>
-        </svg>
-        <span>Adicionar arquivo</span>
-        <input type="file" name="anexo" accept=".pdf,.jpg,.jpeg,.png,.doc,.docx,.txt">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+        <span id="file-label">Adicionar arquivo</span>
+        <input type="file" id="anexo" accept=".pdf,.jpg,.jpeg,.png,.doc,.docx,.txt">
       </label>
       <p class="helper-text">Formatos aceitos: PDF, JPG, PNG, DOC, DOCX, TXT (máx. 10MB)</p>
     </div>
 
-    <!-- SUBMIT -->
-    <button type="submit" class="submit-btn">Enviar Denúncia</button>
+    <button type="submit" class="submit-btn" id="submitBtn">Enviar Denúncia</button>
 
   </form>
 
   <div class="footer">
     Canal de Conduta — ouvidoria.multpelatacado.com.br<br>
-    Sua denúncia será tratada com sigilo e seriedade.
+    Sua denúncia será tratada com sigilo e seriedade, em conformidade com a Lei nº 14.457/2022 e NR-01.
   </div>
 
 </div>
 
 <script>
-// Anon notice: if user fills identification, show confirmation
-const identInput = document.getElementById('identificacao');
-identInput.addEventListener('input', function() {
-  if (this.value.trim().length > 0) {
-    this.style.borderColor = '#7c3aed';
-  } else {
-    this.style.borderColor = '#d1d5db';
-  }
+// File label update
+document.getElementById('anexo').addEventListener('change', function() {
+  document.getElementById('file-label').textContent = this.files.length > 0 ? this.files[0].name : 'Adicionar arquivo';
 });
 
-// Form submission handler
-const form = document.getElementById('condutaForm');
-form.addEventListener('submit', async function(e) {
+// Show message helper
+function showMsg(type, html) {
+  const el = document.getElementById('form-message');
+  el.className = type === 'success' ? 'msg-success' : 'msg-error';
+  el.innerHTML = html;
+  el.style.display = 'block';
+  el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+
+// Form submit
+document.getElementById('condutaForm').addEventListener('submit', async function(e) {
   e.preventDefault();
 
-  const btn = form.querySelector('.submit-btn');
-  const originalText = btn.textContent;
+  const btn = document.getElementById('submitBtn');
   btn.textContent = 'Enviando...';
   btn.disabled = true;
 
-  // Collect form data
+  // Collect values
   const identificacao = document.getElementById('identificacao').value.trim();
-  const natureza = document.querySelector('input[name="natureza"]:checked')?.value || '';
-  const tipoDenuncia = document.querySelector('input[name="tipo_denuncia"]:checked')?.value || '';
-  const tipoDenunciaOutro = document.querySelector('input[name="tipo_denuncia_outro"]')?.value?.trim() || '';
-  const descricao = document.getElementById('descricao').value.trim();
-  const local = document.querySelector('input[name="local"]:checked')?.value || '';
-  const localOutro = document.querySelector('input[name="local_outro"]')?.value?.trim() || '';
-  const dataFato = document.getElementById('data_fato').value || null;
-  const pessoasEnvolvidas = document.getElementById('pessoas_envolvidas').value.trim();
-  const testemunhas = document.getElementById('testemunhas').value.trim();
-  const provas = document.getElementById('provas').value.trim();
-  const fileInput = document.querySelector('input[type="file"]');
-  const temAnexo = fileInput.files.length > 0;
+  const natureza      = document.querySelector('input[name="natureza"]:checked')?.value || null;
+  const tipoRaw       = document.querySelector('input[name="tipo_denuncia"]:checked')?.value || '';
+  const tipoOutro     = document.getElementById('tipo_outro').value.trim();
+  const tipo          = tipoRaw === 'outro' ? tipoOutro : tipoRaw;
+  const descricao     = document.getElementById('descricao').value.trim();
+  const localRaw      = document.querySelector('input[name="local"]:checked')?.value || '';
+  const localOutro    = document.getElementById('local_outro').value.trim();
+  const local         = localRaw === 'outro' ? localOutro : localRaw;
+  const dataFato      = document.getElementById('data_fato').value || null;
+  const pessoas       = document.getElementById('pessoas_envolvidas').value.trim();
+  const testemunhas   = document.getElementById('testemunhas').value.trim();
+  const provas        = document.getElementById('provas').value.trim();
+  const fileInput     = document.getElementById('anexo');
+  const temAnexo      = fileInput.files.length > 0;
 
-  // Validate required fields
-  if (!tipoDenuncia) {
-    showError('Por favor, selecione o tipo de denúncia.');
-    btn.textContent = originalText;
-    btn.disabled = false;
-    return;
-  }
-  if (!descricao) {
-    showError('Por favor, preencha a descrição do ocorrido.');
-    btn.textContent = originalText;
-    btn.disabled = false;
-    return;
-  }
-  if (!local) {
-    showError('Por favor, selecione o local/setor.');
-    btn.textContent = originalText;
-    btn.disabled = false;
-    return;
-  }
+  // Validate
+  if (!tipo) { showMsg('error', '⚠️ Por favor, selecione o tipo de denúncia.'); btn.textContent='Enviar Denúncia'; btn.disabled=false; return; }
+  if (!descricao) { showMsg('error', '⚠️ Por favor, preencha a descrição do ocorrido.'); btn.textContent='Enviar Denúncia'; btn.disabled=false; return; }
+  if (!local) { showMsg('error', '⚠️ Por favor, selecione o local/setor.'); btn.textContent='Enviar Denúncia'; btn.disabled=false; return; }
 
   try {
     // Insert into Supabase
-    const { data, error } = await supabase
-      .from('denuncias')
+    const { data, error } = await db.from('denuncias')
       .insert([{
-        identificacao: identificacao || null,
-        is_anonimo: !identificacao,
-        natureza_informante: natureza || null,
-        tipo_denuncia: tipoDenuncia === 'outro' ? tipoDenunciaOutro : tipoDenuncia,
-        tipo_denuncia_outro: tipoDenuncia === 'outro' ? tipoDenunciaOutro : null,
-        descricao: descricao,
-        local_setor: local === 'outro' ? localOutro : local,
-        local_outro: local === 'outro' ? localOutro : null,
-        data_fato: dataFato,
-        pessoas_envolvidas: pessoasEnvolvidas || null,
-        testemunhas: testemunhas || null,
-        provas: provas || null,
-        tem_anexo: temAnexo,
-        status: 'recebida'
+        identificacao:       identificacao || null,
+        is_anonimo:          !identificacao,
+        natureza_informante: natureza,
+        tipo_denuncia:       tipo,
+        tipo_denuncia_outro: tipoRaw === 'outro' ? tipoOutro : null,
+        descricao:           descricao,
+        local_setor:         local,
+        local_outro:         localRaw === 'outro' ? localOutro : null,
+        data_fato:           dataFato,
+        pessoas_envolvidas:  pessoas || null,
+        testemunhas:         testemunhas || null,
+        provas:              provas || null,
+        tem_anexo:           temAnexo,
+        status:              'recebida'
       }])
-      .select('protocolo')
+      .select('protocolo, id')
       .single();
 
     if (error) throw error;
 
-    // Upload file if exists
+    // Upload attachment if exists
     if (temAnexo && data) {
       const file = fileInput.files[0];
-      const filePath = `${data.protocolo || Date.now()}/${file.name}`;
-      await supabase.storage.from('denuncias-anexos').upload(filePath, file);
+      const path = data.id + '/' + file.name;
+      const { error: storageErr } = await db.storage.from('denuncias-anexos').upload(path, file, { upsert: false });
+      if (!storageErr) {
+        await db.from('denuncia_anexos').insert([{
+          denuncia_id:   data.id,
+          nome_arquivo:  file.name,
+          storage_path:  path,
+          tamanho_bytes: file.size
+        }]);
+      }
     }
 
-    // Success
-    showSuccess(data?.protocolo || 'Registrada');
-    form.reset();
+    // Success message
+    const protocolo = data?.protocolo || '—';
+    showMsg('success',
+      '<strong>✅ Denúncia enviada com sucesso!</strong><br>' +
+      'Protocolo: <strong>' + protocolo + '</strong><br>' +
+      '<span style="font-size:13px">Guarde este número para acompanhamento. ' +
+      'Nossa equipe analisará sua denúncia em até 3 dias úteis.</span>'
+    );
+    document.getElementById('condutaForm').reset();
+    document.getElementById('file-label').textContent = 'Adicionar arquivo';
 
   } catch (err) {
     console.error(err);
-    showError('Erro ao enviar. Tente novamente ou contate o RH.');
-  } finally {
-    btn.textContent = originalText;
-    btn.disabled = false;
+    showMsg('error', '⚠️ Erro ao enviar a denúncia. Por favor, tente novamente ou entre em contato com o RH.');
   }
-});
 
-function showSuccess(protocolo) {
-  const existing = document.getElementById('form-message');
-  if (existing) existing.remove();
-  const msg = document.createElement('div');
-  msg.id = 'form-message';
-  msg.style.cssText = 'background:#f0fdf4;border:1px solid #86efac;border-left:4px solid #16a34a;border-radius:0 10px 10px 0;padding:20px 24px;margin-bottom:20px;font-size:15px;color:#15803d;line-height:1.6';
-  msg.innerHTML = '<strong>✅ Denúncia enviada com sucesso!</strong><br>Seu protocolo: <strong>' + protocolo + '</strong><br><span style="font-size:13px;color:#166534">Guarde este número para acompanhamento. Nossa equipe analisará sua denúncia em até 3 dias úteis.</span>';
-  form.parentNode.insertBefore(msg, form);
-  msg.scrollIntoView({ behavior: 'smooth', block: 'center' });
-}
-
-function showError(msg) {
-  const existing = document.getElementById('form-message');
-  if (existing) existing.remove();
-  const el = document.createElement('div');
-  el.id = 'form-message';
-  el.style.cssText = 'background:#fff1f2;border:1px solid #fca5a5;border-left:4px solid #dc2626;border-radius:0 10px 10px 0;padding:16px 20px;margin-bottom:20px;font-size:14px;color:#dc2626';
-  el.innerHTML = '⚠️ ' + msg;
-  form.parentNode.insertBefore(el, form);
-  el.scrollIntoView({ behavior: 'smooth', block: 'center' });
-}
-
-// File upload label update
-const fileInput = document.querySelector('input[type="file"]');
-const fileLabel = fileInput.parentElement.querySelector('span');
-fileInput.addEventListener('change', function() {
-  if (this.files.length > 0) {
-    fileLabel.textContent = this.files[0].name;
-  } else {
-    fileLabel.textContent = 'Adicionar arquivo';
-  }
+  btn.textContent = 'Enviar Denúncia';
+  btn.disabled = false;
 });
 </script>
-
 </body>
 </html>
