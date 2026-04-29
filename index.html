@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ouvidoria.multpelatacado.com.br — Ouvidoria Multpel</title>
+<title>ouvidoria.multpelatacado.com.br — Canal de Conduta</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -209,6 +209,13 @@ input, button, textarea, select { font: inherit; color: inherit; }
   border-radius: 1px;
 }
 </style>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+  const SUPABASE_URL = 'https://wbghfgtgamhbvoqpompi.supabase.co';
+  const SUPABASE_KEY = 'sb_publishable_PxN-7QzQxMlrmUpK0mX9-w_N7m7IiuT';
+  const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+</script>
 </head>
 <body>
 
@@ -409,7 +416,7 @@ identInput.addEventListener('input', function() {
 
 // Form submission handler
 const form = document.getElementById('condutaForm');
-form.addEventListener('submit', function(e) {
+form.addEventListener('submit', async function(e) {
   e.preventDefault();
 
   const btn = form.querySelector('.submit-btn');
@@ -417,19 +424,107 @@ form.addEventListener('submit', function(e) {
   btn.textContent = 'Enviando...';
   btn.disabled = true;
 
-  // Simulate submission
-  setTimeout(() => {
-    btn.textContent = 'Denúncia enviada com sucesso!';
-    btn.style.background = '#16a34a';
+  // Collect form data
+  const identificacao = document.getElementById('identificacao').value.trim();
+  const natureza = document.querySelector('input[name="natureza"]:checked')?.value || '';
+  const tipoDenuncia = document.querySelector('input[name="tipo_denuncia"]:checked')?.value || '';
+  const tipoDenunciaOutro = document.querySelector('input[name="tipo_denuncia_outro"]')?.value?.trim() || '';
+  const descricao = document.getElementById('descricao').value.trim();
+  const local = document.querySelector('input[name="local"]:checked')?.value || '';
+  const localOutro = document.querySelector('input[name="local_outro"]')?.value?.trim() || '';
+  const dataFato = document.getElementById('data_fato').value || null;
+  const pessoasEnvolvidas = document.getElementById('pessoas_envolvidas').value.trim();
+  const testemunhas = document.getElementById('testemunhas').value.trim();
+  const provas = document.getElementById('provas').value.trim();
+  const fileInput = document.querySelector('input[type="file"]');
+  const temAnexo = fileInput.files.length > 0;
 
-    setTimeout(() => {
-      btn.textContent = originalText;
-      btn.style.background = '';
-      btn.disabled = false;
-      form.reset();
-    }, 3000);
-  }, 1500);
+  // Validate required fields
+  if (!tipoDenuncia) {
+    showError('Por favor, selecione o tipo de denúncia.');
+    btn.textContent = originalText;
+    btn.disabled = false;
+    return;
+  }
+  if (!descricao) {
+    showError('Por favor, preencha a descrição do ocorrido.');
+    btn.textContent = originalText;
+    btn.disabled = false;
+    return;
+  }
+  if (!local) {
+    showError('Por favor, selecione o local/setor.');
+    btn.textContent = originalText;
+    btn.disabled = false;
+    return;
+  }
+
+  try {
+    // Insert into Supabase
+    const { data, error } = await supabase
+      .from('denuncias')
+      .insert([{
+        identificacao: identificacao || null,
+        is_anonimo: !identificacao,
+        natureza_informante: natureza || null,
+        tipo_denuncia: tipoDenuncia === 'outro' ? tipoDenunciaOutro : tipoDenuncia,
+        tipo_denuncia_outro: tipoDenuncia === 'outro' ? tipoDenunciaOutro : null,
+        descricao: descricao,
+        local_setor: local === 'outro' ? localOutro : local,
+        local_outro: local === 'outro' ? localOutro : null,
+        data_fato: dataFato,
+        pessoas_envolvidas: pessoasEnvolvidas || null,
+        testemunhas: testemunhas || null,
+        provas: provas || null,
+        tem_anexo: temAnexo,
+        status: 'recebida'
+      }])
+      .select('protocolo')
+      .single();
+
+    if (error) throw error;
+
+    // Upload file if exists
+    if (temAnexo && data) {
+      const file = fileInput.files[0];
+      const filePath = `${data.protocolo || Date.now()}/${file.name}`;
+      await supabase.storage.from('denuncias-anexos').upload(filePath, file);
+    }
+
+    // Success
+    showSuccess(data?.protocolo || 'Registrada');
+    form.reset();
+
+  } catch (err) {
+    console.error(err);
+    showError('Erro ao enviar. Tente novamente ou contate o RH.');
+  } finally {
+    btn.textContent = originalText;
+    btn.disabled = false;
+  }
 });
+
+function showSuccess(protocolo) {
+  const existing = document.getElementById('form-message');
+  if (existing) existing.remove();
+  const msg = document.createElement('div');
+  msg.id = 'form-message';
+  msg.style.cssText = 'background:#f0fdf4;border:1px solid #86efac;border-left:4px solid #16a34a;border-radius:0 10px 10px 0;padding:20px 24px;margin-bottom:20px;font-size:15px;color:#15803d;line-height:1.6';
+  msg.innerHTML = '<strong>✅ Denúncia enviada com sucesso!</strong><br>Seu protocolo: <strong>' + protocolo + '</strong><br><span style="font-size:13px;color:#166534">Guarde este número para acompanhamento. Nossa equipe analisará sua denúncia em até 3 dias úteis.</span>';
+  form.parentNode.insertBefore(msg, form);
+  msg.scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+
+function showError(msg) {
+  const existing = document.getElementById('form-message');
+  if (existing) existing.remove();
+  const el = document.createElement('div');
+  el.id = 'form-message';
+  el.style.cssText = 'background:#fff1f2;border:1px solid #fca5a5;border-left:4px solid #dc2626;border-radius:0 10px 10px 0;padding:16px 20px;margin-bottom:20px;font-size:14px;color:#dc2626';
+  el.innerHTML = '⚠️ ' + msg;
+  form.parentNode.insertBefore(el, form);
+  el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
 
 // File upload label update
 const fileInput = document.querySelector('input[type="file"]');
