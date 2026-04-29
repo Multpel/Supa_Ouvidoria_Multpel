@@ -765,13 +765,19 @@ function riscoBadge(r){
 
 // ── AUDIT LOG LOCAL ────────────────────────────────────────
 function addAudit(action, proto='', note=''){
-  auditLog.unshift({
-    ts: new Date().toISOString(),
-    user: currentUser?.name || '?',
-    role: currentUser?.role || '?',
-    action, proto, note
-  });
+  const entry = {
+    usuario: currentUser?.name || '?',
+    perfil: currentUser?.role || '?',
+    acao: action,
+    protocolo: proto || null,
+    observacao: note || null
+  };
+  auditLog.unshift({ ts: new Date().toISOString(), user: entry.usuario,
+    role: entry.perfil, action, proto, note });
   if(auditLog.length > 500) auditLog.pop();
+  db.from('audit_log').insert(entry).then(({error})=>{
+    if(error) console.warn('Audit log error:', error.message);
+  });
 }
 
 // ── THEME ──────────────────────────────────────────────────
@@ -827,12 +833,17 @@ window.doLogout = function(){
 // ── LOAD DATA ──────────────────────────────────────────────
 window.loadData = async function(){
   try {
-    const { data, error } = await db
-      .from('denuncias')
-      .select('*')
-      .order('created_at', { ascending: false });
+    const [{ data, error }, { data: logData }] = await Promise.all([
+      db.from('denuncias').select('*').order('created_at', { ascending: false }),
+      db.from('audit_log').select('*').order('created_at', { ascending: false }).limit(500)
+    ]);
     if(error) throw error;
     allDenuncias = data || [];
+    if(logData) auditLog = logData.map(r => ({
+      ts: r.created_at, user: r.usuario,
+      role: r.perfil, action: r.acao,
+      proto: r.protocolo, note: r.observacao
+    }));
     renderDashboard();
     renderTable();
     renderAudit();
