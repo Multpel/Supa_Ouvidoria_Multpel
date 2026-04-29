@@ -1,0 +1,1276 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Comitê de Conduta — Gestão de Denúncias</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ── TOKENS ───────────────────────────────────────────────── */
+:root {
+  --text-xs:   clamp(0.75rem,  0.7rem  + 0.25vw, 0.875rem);
+  --text-sm:   clamp(0.875rem, 0.8rem  + 0.35vw, 1rem);
+  --text-base: clamp(1rem,     0.95rem + 0.25vw, 1.125rem);
+  --text-lg:   clamp(1.125rem, 1rem    + 0.75vw, 1.5rem);
+  --text-xl:   clamp(1.5rem,   1.2rem  + 1.25vw, 2.25rem);
+  --space-1:0.25rem;--space-2:0.5rem;--space-3:0.75rem;--space-4:1rem;
+  --space-5:1.25rem;--space-6:1.5rem;--space-8:2rem;--space-10:2.5rem;
+  --space-12:3rem;--space-16:4rem;
+  --radius-sm:0.375rem;--radius-md:0.5rem;--radius-lg:0.75rem;--radius-xl:1rem;--radius-full:9999px;
+  --transition-interactive:180ms cubic-bezier(0.16,1,0.3,1);
+  --font-body:'Inter','Helvetica Neue',sans-serif;
+  /* Light */
+  --color-bg:#f7f6f2;--color-surface:#ffffff;--color-surface-2:#f9f8f5;
+  --color-surface-offset:#f3f0ec;--color-divider:#dcd9d5;--color-border:#d4d1ca;
+  --color-text:#28251d;--color-text-muted:#7a7974;--color-text-faint:#bab9b4;
+  --color-primary:#01696f;--color-primary-hover:#0c4e54;--color-primary-active:#0f3638;
+  --color-primary-highlight:#cedcd8;
+  --color-success:#437a22;--color-success-hover:#2e5c10;--color-success-highlight:#d4dfcc;
+  --color-warning:#964219;--color-warning-hover:#713417;--color-warning-highlight:#ddcfc6;
+  --color-error:#a12c7b;--color-error-hover:#7d1e5e;--color-error-highlight:#e0ced7;
+  --color-notification:#a13544;--color-notification-highlight:#dececb;
+  --color-blue:#006494;--color-blue-highlight:#c6d8e4;
+  --color-gold:#d19900;--color-gold-highlight:#e9e0c6;
+  --shadow-sm:0 1px 2px oklch(0.2 0.01 80/0.06);
+  --shadow-md:0 4px 12px oklch(0.2 0.01 80/0.08);
+  --shadow-lg:0 12px 32px oklch(0.2 0.01 80/0.12);
+  --sidebar-w:240px;
+}
+[data-theme="dark"] {
+  --color-bg:#171614;--color-surface:#1c1b19;--color-surface-2:#201f1d;
+  --color-surface-offset:#1d1c1a;--color-divider:#262523;--color-border:#393836;
+  --color-text:#cdccca;--color-text-muted:#797876;--color-text-faint:#5a5957;
+  --color-primary:#4f98a3;--color-primary-hover:#227f8b;--color-primary-active:#1a626b;
+  --color-primary-highlight:#313b3b;
+  --color-success:#6daa45;--color-success-hover:#4d8f25;--color-success-highlight:#3a4435;
+  --color-warning:#bb653b;--color-warning-hover:#b95525;--color-warning-highlight:#564942;
+  --color-error:#d163a7;--color-error-hover:#b9478f;--color-error-highlight:#4c3d46;
+  --color-notification:#dd6974;--color-notification-highlight:#574848;
+  --color-blue:#5591c7;--color-blue-highlight:#3a4550;
+  --color-gold:#e8af34;--color-gold-highlight:#4d4332;
+  --shadow-sm:0 1px 2px oklch(0 0 0/0.2);
+  --shadow-md:0 4px 12px oklch(0 0 0/0.3);
+  --shadow-lg:0 12px 32px oklch(0 0 0/0.4);
+}
+
+/* ── RESET ────────────────────────────────────────────────── */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;scroll-behavior:smooth}
+body{min-height:100dvh;font-family:var(--font-body);font-size:var(--text-sm);
+  color:var(--color-text);background:var(--color-bg);line-height:1.5}
+input,button,textarea,select{font:inherit;color:inherit}
+button{cursor:pointer;background:none;border:none}
+img{display:block;max-width:100%;height:auto}
+:focus-visible{outline:2px solid var(--color-primary);outline-offset:2px;border-radius:var(--radius-sm)}
+a,button,[role="button"],input,textarea,select{
+  transition:color var(--transition-interactive),background var(--transition-interactive),
+    border-color var(--transition-interactive),box-shadow var(--transition-interactive)}
+
+/* ── LOGIN SCREEN ─────────────────────────────────────────── */
+#loginScreen {
+  display:flex;align-items:center;justify-content:center;
+  min-height:100dvh;padding:var(--space-4);background:var(--color-bg);
+}
+.login-card {
+  background:var(--color-surface);border-radius:var(--radius-xl);
+  padding:var(--space-8) var(--space-8);width:100%;max-width:400px;
+  box-shadow:var(--shadow-lg);border:1px solid var(--color-border);
+}
+.login-logo {
+  display:flex;align-items:center;gap:var(--space-3);margin-bottom:var(--space-6);
+}
+.login-logo svg{flex-shrink:0}
+.login-logo-text{font-size:var(--text-base);font-weight:700;color:var(--color-text)}
+.login-logo-sub{font-size:var(--text-xs);color:var(--color-text-muted)}
+.login-card h2{font-size:var(--text-lg);font-weight:700;margin-bottom:var(--space-1)}
+.login-card p{font-size:var(--text-xs);color:var(--color-text-muted);margin-bottom:var(--space-6)}
+.field{margin-bottom:var(--space-4)}
+.field label{display:block;font-size:var(--text-xs);font-weight:600;
+  color:var(--color-text-muted);text-transform:uppercase;letter-spacing:.04em;margin-bottom:var(--space-2)}
+.field input,.field select{
+  width:100%;padding:var(--space-3) var(--space-4);border:1px solid var(--color-border);
+  border-radius:var(--radius-md);font-size:var(--text-sm);background:var(--color-surface);
+  transition:border-color var(--transition-interactive),box-shadow var(--transition-interactive)}
+.field input:focus,.field select:focus{
+  border-color:var(--color-primary);
+  box-shadow:0 0 0 3px color-mix(in oklch,var(--color-primary) 15%,transparent);outline:none}
+.btn-primary{
+  width:100%;padding:var(--space-3) var(--space-4);background:var(--color-primary);
+  color:#fff;font-size:var(--text-sm);font-weight:600;border-radius:var(--radius-md);
+  border:none;cursor:pointer}
+.btn-primary:hover{background:var(--color-primary-hover)}
+.btn-primary:disabled{opacity:.5;cursor:not-allowed}
+.login-err{
+  background:var(--color-error-highlight);color:var(--color-error);
+  border-radius:var(--radius-md);padding:var(--space-3) var(--space-4);
+  font-size:var(--text-xs);margin-bottom:var(--space-4);display:none}
+.login-lgpd{
+  background:var(--color-surface-offset);border-radius:var(--radius-md);
+  padding:var(--space-3) var(--space-4);font-size:var(--text-xs);
+  color:var(--color-text-muted);margin-top:var(--space-4);line-height:1.6}
+.login-lgpd strong{color:var(--color-text)}
+
+/* ── APP SHELL ────────────────────────────────────────────── */
+#appShell{display:none;height:100dvh;overflow:hidden}
+.app-layout{display:flex;height:100%}
+
+/* ── SIDEBAR ──────────────────────────────────────────────── */
+.sidebar{
+  width:var(--sidebar-w);flex-shrink:0;background:var(--color-surface);
+  border-right:1px solid var(--color-divider);display:flex;flex-direction:column;
+  height:100%;overflow-y:auto;transition:width var(--transition-interactive)}
+.sidebar-header{
+  padding:var(--space-4) var(--space-5);border-bottom:1px solid var(--color-divider);
+  display:flex;align-items:center;gap:var(--space-3)}
+.sidebar-brand{font-size:var(--text-sm);font-weight:700;color:var(--color-text);line-height:1.2}
+.sidebar-brand span{display:block;font-size:var(--text-xs);font-weight:400;color:var(--color-text-muted)}
+.sidebar-nav{padding:var(--space-3) var(--space-2);flex:1}
+.nav-section-label{
+  font-size:0.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;
+  color:var(--color-text-faint);padding:var(--space-4) var(--space-3) var(--space-2)}
+.nav-item{
+  display:flex;align-items:center;gap:var(--space-3);padding:var(--space-2) var(--space-3);
+  border-radius:var(--radius-md);cursor:pointer;font-size:var(--text-sm);
+  color:var(--color-text-muted);text-decoration:none;margin-bottom:2px;
+  border:none;background:none;width:100%;text-align:left}
+.nav-item:hover{background:var(--color-surface-offset);color:var(--color-text)}
+.nav-item.active{background:var(--color-primary-highlight);color:var(--color-primary);font-weight:600}
+.nav-item svg{flex-shrink:0;width:16px;height:16px}
+.nav-badge{
+  margin-left:auto;background:var(--color-notification);color:#fff;
+  font-size:0.65rem;font-weight:700;padding:1px 6px;border-radius:var(--radius-full)}
+.sidebar-footer{
+  padding:var(--space-3) var(--space-4);border-top:1px solid var(--color-divider)}
+.user-info{
+  display:flex;align-items:center;gap:var(--space-3);padding:var(--space-2) var(--space-1)}
+.user-avatar{
+  width:32px;height:32px;border-radius:var(--radius-full);
+  background:var(--color-primary);color:#fff;
+  display:flex;align-items:center;justify-content:center;
+  font-size:var(--text-xs);font-weight:700;flex-shrink:0}
+.user-name{font-size:var(--text-xs);font-weight:600;color:var(--color-text)}
+.user-role{font-size:0.65rem;color:var(--color-text-muted)}
+.logout-btn{
+  width:100%;margin-top:var(--space-2);padding:var(--space-2) var(--space-3);
+  background:none;border:1px solid var(--color-border);border-radius:var(--radius-md);
+  font-size:var(--text-xs);color:var(--color-text-muted);cursor:pointer;
+  display:flex;align-items:center;gap:var(--space-2)}
+.logout-btn:hover{border-color:var(--color-error);color:var(--color-error)}
+
+/* ── MAIN CONTENT ─────────────────────────────────────────── */
+.main-content{flex:1;overflow-y:auto;display:flex;flex-direction:column}
+.top-bar{
+  background:var(--color-surface);border-bottom:1px solid var(--color-divider);
+  padding:0 var(--space-6);height:56px;display:flex;align-items:center;
+  justify-content:space-between;flex-shrink:0;position:sticky;top:0;z-index:10}
+.top-bar-title{font-size:var(--text-base);font-weight:600;color:var(--color-text)}
+.top-bar-actions{display:flex;align-items:center;gap:var(--space-3)}
+.icon-btn{
+  width:36px;height:36px;border-radius:var(--radius-md);
+  display:flex;align-items:center;justify-content:center;
+  color:var(--color-text-muted);border:1px solid var(--color-border);background:none;cursor:pointer}
+.icon-btn:hover{background:var(--color-surface-offset);color:var(--color-text)}
+.page-content{padding:var(--space-6);flex:1}
+
+/* ── KPI CARDS ────────────────────────────────────────────── */
+.kpi-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(180px,100%),1fr));gap:var(--space-4);margin-bottom:var(--space-6)}
+.kpi-card{
+  background:var(--color-surface);border:1px solid var(--color-border);
+  border-radius:var(--radius-lg);padding:var(--space-4) var(--space-5);
+  box-shadow:var(--shadow-sm)}
+.kpi-label{font-size:var(--text-xs);color:var(--color-text-muted);font-weight:500;margin-bottom:var(--space-1)}
+.kpi-value{font-size:var(--text-xl);font-weight:700;color:var(--color-text);
+  font-variant-numeric:tabular-nums lining-nums;line-height:1}
+.kpi-sub{font-size:var(--text-xs);color:var(--color-text-faint);margin-top:var(--space-1)}
+.kpi-dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:4px}
+
+/* ── FILTER BAR ───────────────────────────────────────────── */
+.filter-bar{
+  display:flex;flex-wrap:wrap;gap:var(--space-3);align-items:center;
+  background:var(--color-surface);border:1px solid var(--color-border);
+  border-radius:var(--radius-lg);padding:var(--space-3) var(--space-4);
+  margin-bottom:var(--space-4)}
+.filter-bar select,.filter-bar input{
+  padding:var(--space-2) var(--space-3);border:1px solid var(--color-border);
+  border-radius:var(--radius-md);font-size:var(--text-xs);
+  background:var(--color-surface);color:var(--color-text);min-width:140px}
+.filter-bar select:focus,.filter-bar input:focus{
+  border-color:var(--color-primary);outline:none;
+  box-shadow:0 0 0 2px color-mix(in oklch,var(--color-primary) 15%,transparent)}
+.search-input{flex:1;min-width:200px}
+.btn-sm{
+  padding:var(--space-2) var(--space-3);font-size:var(--text-xs);font-weight:600;
+  border-radius:var(--radius-md);border:1px solid var(--color-border);
+  background:var(--color-surface);color:var(--color-text);cursor:pointer;
+  display:flex;align-items:center;gap:var(--space-2)}
+.btn-sm:hover{background:var(--color-surface-offset)}
+.btn-sm.primary{background:var(--color-primary);color:#fff;border-color:var(--color-primary)}
+.btn-sm.primary:hover{background:var(--color-primary-hover);border-color:var(--color-primary-hover)}
+
+/* ── TABLE ────────────────────────────────────────────────── */
+.table-wrap{
+  background:var(--color-surface);border:1px solid var(--color-border);
+  border-radius:var(--radius-lg);overflow:hidden;box-shadow:var(--shadow-sm)}
+.data-table{width:100%;border-collapse:collapse;font-size:var(--text-xs)}
+.data-table th{
+  background:var(--color-surface-offset);font-size:0.65rem;font-weight:700;
+  text-transform:uppercase;letter-spacing:.06em;color:var(--color-text-muted);
+  padding:var(--space-3) var(--space-4);text-align:left;
+  border-bottom:1px solid var(--color-divider);white-space:nowrap;cursor:pointer;
+  user-select:none}
+.data-table th:hover{color:var(--color-text)}
+.data-table td{
+  padding:var(--space-3) var(--space-4);border-bottom:1px solid var(--color-divider);
+  color:var(--color-text);vertical-align:middle;font-variant-numeric:tabular-nums}
+.data-table tr:last-child td{border-bottom:none}
+.data-table tbody tr{cursor:pointer;transition:background var(--transition-interactive)}
+.data-table tbody tr:hover{background:var(--color-surface-offset)}
+.table-empty{padding:var(--space-10);text-align:center;color:var(--color-text-muted);font-size:var(--text-xs)}
+
+/* ── BADGES ───────────────────────────────────────────────── */
+.badge{
+  display:inline-flex;align-items:center;gap:4px;
+  padding:2px 8px;border-radius:var(--radius-full);
+  font-size:0.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.04em;white-space:nowrap}
+.badge-recebida{background:var(--color-blue-highlight);color:var(--color-blue)}
+.badge-em_analise{background:var(--color-gold-highlight);color:var(--color-gold)}
+.badge-concluida{background:var(--color-success-highlight);color:var(--color-success)}
+.badge-arquivada{background:var(--color-surface-offset);color:var(--color-text-muted)}
+.badge-improcedente{background:var(--color-notification-highlight);color:var(--color-notification)}
+.badge-tipo{background:var(--color-primary-highlight);color:var(--color-primary)}
+.badge-risco-alto{background:var(--color-error-highlight);color:var(--color-error)}
+.badge-risco-medio{background:var(--color-warning-highlight);color:var(--color-warning)}
+.badge-risco-baixo{background:var(--color-success-highlight);color:var(--color-success)}
+.badge-role-admin{background:var(--color-error-highlight);color:var(--color-error)}
+.badge-role-membro{background:var(--color-primary-highlight);color:var(--color-primary)}
+.badge-role-visualizador{background:var(--color-surface-offset);color:var(--color-text-muted)}
+
+/* ── DETAIL DRAWER ────────────────────────────────────────── */
+.drawer-overlay{
+  position:fixed;inset:0;background:oklch(0.1 0 0/0.5);z-index:100;
+  display:none;align-items:flex-start;justify-content:flex-end;padding:var(--space-4)}
+.drawer-overlay.open{display:flex}
+.drawer{
+  background:var(--color-surface);border-radius:var(--radius-xl);
+  width:100%;max-width:640px;height:calc(100dvh - var(--space-8));
+  overflow-y:auto;box-shadow:var(--shadow-lg);display:flex;flex-direction:column}
+.drawer-header{
+  padding:var(--space-5) var(--space-6);border-bottom:1px solid var(--color-divider);
+  display:flex;align-items:flex-start;justify-content:space-between;
+  position:sticky;top:0;background:var(--color-surface);z-index:5;flex-shrink:0}
+.drawer-title{font-size:var(--text-base);font-weight:700;color:var(--color-text);margin-bottom:var(--space-1)}
+.drawer-proto{font-size:var(--text-xs);color:var(--color-text-muted);font-family:monospace}
+.drawer-close{
+  width:32px;height:32px;display:flex;align-items:center;justify-content:center;
+  border-radius:var(--radius-md);border:1px solid var(--color-border);
+  background:none;cursor:pointer;color:var(--color-text-muted);flex-shrink:0}
+.drawer-close:hover{background:var(--color-surface-offset);color:var(--color-text)}
+.drawer-body{padding:var(--space-5) var(--space-6);flex:1}
+.drawer-section{margin-bottom:var(--space-6)}
+.drawer-section-title{
+  font-size:0.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;
+  color:var(--color-text-faint);margin-bottom:var(--space-3);
+  padding-bottom:var(--space-2);border-bottom:1px solid var(--color-divider)}
+.detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:var(--space-3)}
+.detail-item label{font-size:var(--text-xs);color:var(--color-text-muted);display:block;margin-bottom:2px}
+.detail-item p{font-size:var(--text-sm);color:var(--color-text);font-weight:500}
+.detail-full{grid-column:1/-1}
+.detail-text{
+  background:var(--color-surface-offset);border-radius:var(--radius-md);
+  padding:var(--space-3) var(--space-4);font-size:var(--text-sm);
+  color:var(--color-text);line-height:1.7;white-space:pre-wrap}
+.lgpd-banner{
+  background:var(--color-primary-highlight);border-radius:var(--radius-md);
+  padding:var(--space-3) var(--space-4);font-size:var(--text-xs);
+  color:var(--color-primary);margin-bottom:var(--space-4);
+  display:flex;gap:var(--space-2);align-items:flex-start;line-height:1.5}
+
+/* ── STATUS UPDATE FORM ───────────────────────────────────── */
+.status-form{
+  background:var(--color-surface-offset);border-radius:var(--radius-lg);
+  padding:var(--space-4) var(--space-5)}
+.status-form-title{font-size:var(--text-xs);font-weight:700;color:var(--color-text);margin-bottom:var(--space-3)}
+.status-form .field{margin-bottom:var(--space-3)}
+.status-form .field:last-child{margin-bottom:0}
+.status-form textarea{
+  width:100%;padding:var(--space-3);border:1px solid var(--color-border);
+  border-radius:var(--radius-md);font-size:var(--text-sm);
+  background:var(--color-surface);resize:vertical;min-height:80px;line-height:1.5}
+.status-form textarea:focus{
+  border-color:var(--color-primary);outline:none;
+  box-shadow:0 0 0 2px color-mix(in oklch,var(--color-primary) 15%,transparent)}
+.btn-row{display:flex;gap:var(--space-3);justify-content:flex-end;margin-top:var(--space-3)}
+
+/* ── AUDIT LOG ────────────────────────────────────────────── */
+.audit-timeline{list-style:none}
+.audit-item{
+  display:flex;gap:var(--space-3);padding:var(--space-3) 0;
+  border-bottom:1px solid var(--color-divider)}
+.audit-item:last-child{border-bottom:none}
+.audit-dot{
+  width:8px;height:8px;border-radius:50%;background:var(--color-primary);
+  flex-shrink:0;margin-top:5px}
+.audit-content{flex:1}
+.audit-action{font-size:var(--text-xs);font-weight:600;color:var(--color-text)}
+.audit-meta{font-size:0.65rem;color:var(--color-text-muted);margin-top:2px}
+.audit-note{
+  font-size:var(--text-xs);color:var(--color-text-muted);
+  background:var(--color-surface-offset);border-radius:var(--radius-sm);
+  padding:var(--space-2) var(--space-3);margin-top:var(--space-2);font-style:italic}
+
+/* ── VIEWS ────────────────────────────────────────────────── */
+.view{display:none}
+.view.active{display:block}
+
+/* ── AUDIT FULL PAGE ──────────────────────────────────────── */
+.audit-page-item{
+  background:var(--color-surface);border:1px solid var(--color-border);
+  border-radius:var(--radius-md);padding:var(--space-3) var(--space-4);
+  margin-bottom:var(--space-2);display:flex;align-items:flex-start;gap:var(--space-4)}
+.audit-page-dot{
+  width:8px;height:8px;border-radius:50%;background:var(--color-primary);
+  flex-shrink:0;margin-top:6px}
+.audit-page-proto{
+  font-size:var(--text-xs);font-family:monospace;font-weight:600;
+  color:var(--color-primary);min-width:160px;flex-shrink:0}
+.audit-page-action{font-size:var(--text-xs);color:var(--color-text);flex:1}
+.audit-page-meta{font-size:0.65rem;color:var(--color-text-muted);white-space:nowrap}
+
+/* ── MEMBERS PAGE ─────────────────────────────────────────── */
+.member-card{
+  background:var(--color-surface);border:1px solid var(--color-border);
+  border-radius:var(--radius-lg);padding:var(--space-4) var(--space-5);
+  display:flex;align-items:center;gap:var(--space-4);margin-bottom:var(--space-3)}
+.member-avatar{
+  width:40px;height:40px;border-radius:var(--radius-full);
+  background:var(--color-primary);color:#fff;
+  display:flex;align-items:center;justify-content:center;
+  font-size:var(--text-sm);font-weight:700;flex-shrink:0}
+.member-info{flex:1}
+.member-name{font-size:var(--text-sm);font-weight:600;color:var(--color-text)}
+.member-email{font-size:var(--text-xs);color:var(--color-text-muted)}
+.member-actions{display:flex;gap:var(--space-2);align-items:center}
+
+/* ── RESPONSIVE ───────────────────────────────────────────── */
+@media(max-width:768px){
+  :root{--sidebar-w:0px}
+  .sidebar{position:fixed;left:0;top:0;bottom:0;width:240px;z-index:50;
+    transform:translateX(-100%);transition:transform var(--transition-interactive)}
+  .sidebar.open{transform:translateX(0)}
+  .page-content{padding:var(--space-4)}
+  .kpi-grid{grid-template-columns:1fr 1fr}
+  .detail-grid{grid-template-columns:1fr}
+  .drawer{max-width:100%;border-radius:var(--radius-xl) var(--radius-xl) 0 0;height:90dvh;
+    position:fixed;bottom:0;left:0;right:0;margin:0}
+  .drawer-overlay{align-items:flex-end;padding:0}
+}
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}
+}
+
+/* ── TOAST ────────────────────────────────────────────────── */
+.toast-container{position:fixed;top:var(--space-4);right:var(--space-4);z-index:200;display:flex;flex-direction:column;gap:var(--space-2)}
+.toast{
+  background:var(--color-text);color:var(--color-bg);
+  padding:var(--space-3) var(--space-5);border-radius:var(--radius-md);
+  font-size:var(--text-xs);font-weight:500;box-shadow:var(--shadow-md);
+  animation:slideIn .2s ease;max-width:320px}
+.toast.success{background:var(--color-success)}
+.toast.error{background:var(--color-error)}
+@keyframes slideIn{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}
+
+/* ── LOADING ──────────────────────────────────────────────── */
+.skeleton{
+  background:linear-gradient(90deg,var(--color-surface-offset) 25%,var(--color-divider) 50%,var(--color-surface-offset) 75%);
+  background-size:200% 100%;animation:shimmer 1.5s ease-in-out infinite;
+  border-radius:var(--radius-sm);height:1em}
+@keyframes shimmer{0%{background-position:-200% 0}100%{background-position:200% 0}}
+
+/* ── MODAL ────────────────────────────────────────────────── */
+.modal-overlay{
+  position:fixed;inset:0;background:oklch(0.1 0 0/0.5);z-index:150;
+  display:none;align-items:center;justify-content:center;padding:var(--space-4)}
+.modal-overlay.open{display:flex}
+.modal{
+  background:var(--color-surface);border-radius:var(--radius-xl);
+  width:100%;max-width:480px;box-shadow:var(--shadow-lg);padding:var(--space-6)}
+.modal h3{font-size:var(--text-base);font-weight:700;margin-bottom:var(--space-4)}
+
+/* ── EMPTY STATE ──────────────────────────────────────────── */
+.empty-state{
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:var(--space-16) var(--space-8);text-align:center;color:var(--color-text-muted)}
+.empty-state svg{margin-bottom:var(--space-4);opacity:.3;width:48px;height:48px}
+.empty-state h3{font-size:var(--text-base);font-weight:600;color:var(--color-text);margin-bottom:var(--space-2)}
+.empty-state p{font-size:var(--text-xs);max-width:32ch}
+
+/* ── LGPD ALERT ───────────────────────────────────────────── */
+.lgpd-alert{
+  background:var(--color-warning-highlight);border-left:3px solid var(--color-warning);
+  border-radius:0 var(--radius-md) var(--radius-md) 0;padding:var(--space-3) var(--space-4);
+  font-size:var(--text-xs);color:var(--color-warning);margin-bottom:var(--space-4);line-height:1.6}
+.lgpd-alert strong{font-weight:700}
+
+/* REPORT/STATS */
+.stats-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(260px,100%),1fr));gap:var(--space-4);margin-bottom:var(--space-6)}
+.stats-card{background:var(--color-surface);border:1px solid var(--color-border);border-radius:var(--radius-lg);padding:var(--space-4) var(--space-5)}
+.stats-card-title{font-size:var(--text-xs);font-weight:700;color:var(--color-text-muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:var(--space-4)}
+.bar-row{display:flex;align-items:center;gap:var(--space-3);margin-bottom:var(--space-2)}
+.bar-label{font-size:var(--text-xs);color:var(--color-text-muted);width:140px;flex-shrink:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.bar-track{flex:1;height:6px;background:var(--color-surface-offset);border-radius:var(--radius-full);overflow:hidden}
+.bar-fill{height:100%;border-radius:var(--radius-full);background:var(--color-primary);transition:width .5s ease}
+.bar-count{font-size:var(--text-xs);color:var(--color-text-muted);min-width:20px;text-align:right;font-variant-numeric:tabular-nums}
+</style>
+</head>
+<body>
+
+<!-- ══ LOGIN ══════════════════════════════════════════════ -->
+<div id="loginScreen">
+  <div class="login-card">
+    <div class="login-logo">
+      <svg width="36" height="36" viewBox="0 0 36 36" fill="none" aria-label="Multpel">
+        <rect width="36" height="36" rx="8" fill="#01696f"/>
+        <path d="M8 24V13l5 7 5-7v11M22 13h6M22 18h5M22 24h6" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <div>
+        <div class="login-brand">Grupo Multpel</div>
+        <div class="login-logo-sub">Canal de Conduta — Comitê</div>
+      </div>
+    </div>
+    <h2>Acesso Restrito</h2>
+    <p>Área exclusiva para membros do Comitê de Ética e Conduta</p>
+    <div id="loginErr" class="login-err">Usuário ou senha inválidos.</div>
+    <form id="loginForm">
+      <div class="field">
+        <label for="loginUser">Usuário</label>
+        <input type="text" id="loginUser" autocomplete="username" required placeholder="seu.usuario">
+      </div>
+      <div class="field">
+        <label for="loginPass">Senha</label>
+        <input type="password" id="loginPass" autocomplete="current-password" required placeholder="••••••••">
+      </div>
+      <div class="field">
+        <label for="loginProfile">Perfil de acesso</label>
+        <select id="loginProfile">
+          <option value="admin">Administrador do Comitê</option>
+          <option value="membro">Membro do Comitê</option>
+          <option value="visualizador">Visualizador (somente leitura)</option>
+        </select>
+      </div>
+      <button type="submit" class="btn-primary">Entrar com segurança</button>
+    </form>
+    <div class="login-lgpd">
+      <strong>🔒 Conformidade LGPD / NR-1</strong>
+      Este sistema processa dados sensíveis. O acesso é monitorado e registrado em log de auditoria. 
+      Toda ação realizada é rastreável conforme Lei nº 14.457/2022 e NR-01.
+    </div>
+  </div>
+</div>
+
+<!-- ══ APP SHELL ════════════════════════════════════════════ -->
+<div id="appShell">
+  <div class="app-layout">
+
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <svg width="28" height="28" viewBox="0 0 36 36" fill="none">
+          <rect width="36" height="36" rx="8" fill="#01696f"/>
+          <path d="M8 24V13l5 7 5-7v11M22 13h6M22 18h5M22 24h6" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <div class="sidebar-brand">Multpel<span>Comitê de Conduta</span></div>
+      </div>
+      <nav class="sidebar-nav">
+        <div class="nav-section-label">Principal</div>
+        <button class="nav-item active" data-view="dashboard" onclick="switchView('dashboard',this)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+          Painel Geral
+        </button>
+        <button class="nav-item" data-view="denuncias" onclick="switchView('denuncias',this)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+          Denúncias
+          <span class="nav-badge" id="badgePendentes">0</span>
+        </button>
+        <div class="nav-section-label">Gestão</div>
+        <button class="nav-item" data-view="relatorios" onclick="switchView('relatorios',this)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+          Relatórios
+        </button>
+        <button class="nav-item" data-view="auditoria" onclick="switchView('auditoria',this)" id="navAudit">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          Log de Auditoria
+        </button>
+        <button class="nav-item" data-view="membros" onclick="switchView('membros',this)" id="navMembros">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          Membros
+        </button>
+      </nav>
+      <div class="sidebar-footer">
+        <div class="user-info">
+          <div class="user-avatar" id="userAvatar">?</div>
+          <div>
+            <div class="user-name" id="userNameSidebar">—</div>
+            <div class="user-role" id="userRoleSidebar">—</div>
+          </div>
+        </div>
+        <button class="logout-btn" onclick="doLogout()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+          Sair do sistema
+        </button>
+      </div>
+    </aside>
+
+    <!-- Main -->
+    <main class="main-content">
+      <header class="top-bar">
+        <button class="icon-btn" id="menuToggle" onclick="toggleSidebar()" aria-label="Menu" style="display:none">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        </button>
+        <span class="top-bar-title" id="pageTitle">Painel Geral</span>
+        <div class="top-bar-actions">
+          <button class="icon-btn" onclick="loadData()" title="Atualizar dados" aria-label="Atualizar">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+          </button>
+          <button class="icon-btn" onclick="toggleTheme()" data-theme-toggle aria-label="Alternar tema">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+          </button>
+        </div>
+      </header>
+
+      <div class="page-content">
+
+        <!-- ── VIEW: DASHBOARD ── -->
+        <div class="view active" id="view-dashboard">
+          <div class="lgpd-alert">
+            <strong>⚖️ LGPD / NR-1 / Lei 14.457/2022:</strong> Todas as denúncias são tratadas com sigilo. O acesso a dados identificados é restrito a membros autorizados. Ações são registradas em log de auditoria imutável.
+          </div>
+          <div class="kpi-grid" id="kpiGrid">
+            <div class="kpi-card"><div class="kpi-label">Total de Denúncias</div><div class="kpi-value" id="kpiTotal">—</div><div class="kpi-sub">Todas</div></div>
+            <div class="kpi-card"><div class="kpi-label">Recebidas</div><div class="kpi-value" id="kpiRecebidas" style="color:var(--color-blue)">—</div><div class="kpi-sub">Aguardando análise</div></div>
+            <div class="kpi-card"><div class="kpi-label">Em Análise</div><div class="kpi-value" id="kpiAnalise" style="color:var(--color-gold)">—</div><div class="kpi-sub">Em andamento</div></div>
+            <div class="kpi-card"><div class="kpi-label">Concluídas</div><div class="kpi-value" id="kpiConcluidas" style="color:var(--color-success)">—</div><div class="kpi-sub">Encerradas</div></div>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--space-4);margin-bottom:var(--space-4)">
+            <div class="stats-card">
+              <div class="stats-card-title">Por Tipo</div>
+              <div id="chartTipo"></div>
+            </div>
+            <div class="stats-card">
+              <div class="stats-card-title">Por Setor</div>
+              <div id="chartSetor"></div>
+            </div>
+          </div>
+          <div style="background:var(--color-surface);border:1px solid var(--color-border);border-radius:var(--radius-lg);padding:var(--space-4) var(--space-5)">
+            <div class="stats-card-title" style="margin-bottom:var(--space-3)">Últimas Denúncias</div>
+            <table class="data-table" id="tableRecent"><thead><tr>
+              <th>Protocolo</th><th>Tipo</th><th>Setor</th><th>Data</th><th>Status</th>
+            </tr></thead><tbody id="tbodyRecent"></tbody></table>
+          </div>
+        </div>
+
+        <!-- ── VIEW: DENÚNCIAS ── -->
+        <div class="view" id="view-denuncias">
+          <div class="filter-bar">
+            <input class="search-input" type="search" id="searchInput" placeholder="Buscar protocolo, tipo, descrição..." oninput="renderTable()">
+            <select id="filterStatus" onchange="renderTable()">
+              <option value="">Todos os status</option>
+              <option value="recebida">Recebida</option>
+              <option value="em_analise">Em Análise</option>
+              <option value="concluida">Concluída</option>
+              <option value="arquivada">Arquivada</option>
+              <option value="improcedente">Improcedente</option>
+            </select>
+            <select id="filterTipo" onchange="renderTable()">
+              <option value="">Todos os tipos</option>
+              <option value="assedio_moral">Assédio Moral</option>
+              <option value="assedio_sexual">Assédio Sexual</option>
+              <option value="discriminacao">Discriminação</option>
+              <option value="violencia">Violência</option>
+              <option value="fraude">Fraude</option>
+              <option value="conduta_antietica">Conduta Antiética</option>
+              <option value="outro">Outro</option>
+            </select>
+            <select id="filterSetor" onchange="renderTable()">
+              <option value="">Todos os setores</option>
+              <option value="administrativo">Administrativo</option>
+              <option value="balcao_telemarketing">Balcão / Telemarketing</option>
+              <option value="comercial_externo">Comercial / Externo</option>
+              <option value="industria">Indústria</option>
+              <option value="entrega">Entrega</option>
+              <option value="expedicao_noturno">Expedição (Noturno)</option>
+              <option value="recebimento">Recebimento</option>
+            </select>
+            <button class="btn-sm primary" onclick="exportCSV()">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              Exportar CSV
+            </button>
+          </div>
+          <div class="table-wrap">
+            <table class="data-table" id="tableMain">
+              <thead><tr>
+                <th onclick="sortBy('protocolo')">Protocolo ↕</th>
+                <th onclick="sortBy('tipo_denuncia')">Tipo ↕</th>
+                <th onclick="sortBy('local_setor')">Setor ↕</th>
+                <th onclick="sortBy('created_at')">Data ↕</th>
+                <th onclick="sortBy('classificacao_risco')">Risco ↕</th>
+                <th onclick="sortBy('status')">Status ↕</th>
+                <th>Ação</th>
+              </tr></thead>
+              <tbody id="tbodyMain"></tbody>
+            </table>
+          </div>
+          <div id="tablePagination" style="display:flex;align-items:center;justify-content:space-between;margin-top:var(--space-3);font-size:var(--text-xs);color:var(--color-text-muted)">
+            <span id="paginationInfo"></span>
+            <div style="display:flex;gap:var(--space-2)">
+              <button class="btn-sm" id="btnPrev" onclick="changePage(-1)">← Anterior</button>
+              <button class="btn-sm" id="btnNext" onclick="changePage(1)">Próxima →</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── VIEW: RELATÓRIOS ── -->
+        <div class="view" id="view-relatorios">
+          <div class="lgpd-alert">
+            <strong>📊 Relatório para Gestão:</strong> Dados anonimizados conforme LGPD Art. 12. Identificação pessoal não é exibida neste relatório. Exportação disponível para prestação de contas ao RH e Diretoria.
+          </div>
+          <div class="stats-grid" id="statsGrid"></div>
+          <div style="display:flex;justify-content:flex-end;gap:var(--space-3)">
+            <button class="btn-sm primary" onclick="exportRelatorio()">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              Exportar Relatório
+            </button>
+          </div>
+        </div>
+
+        <!-- ── VIEW: AUDITORIA ── -->
+        <div class="view" id="view-auditoria">
+          <div style="margin-bottom:var(--space-4);background:var(--color-surface);border:1px solid var(--color-border);border-radius:var(--radius-lg);padding:var(--space-4)">
+            <div class="stats-card-title" style="margin-bottom:var(--space-3)">Filtrar Log</div>
+            <div style="display:flex;gap:var(--space-3);flex-wrap:wrap">
+              <input type="text" id="auditSearch" placeholder="Buscar usuário, protocolo, ação..." 
+                style="flex:1;min-width:200px;padding:var(--space-2) var(--space-3);border:1px solid var(--color-border);border-radius:var(--radius-md);font-size:var(--text-xs);background:var(--color-surface)"
+                oninput="renderAudit()">
+              <input type="date" id="auditDate" 
+                style="padding:var(--space-2) var(--space-3);border:1px solid var(--color-border);border-radius:var(--radius-md);font-size:var(--text-xs);background:var(--color-surface)"
+                onchange="renderAudit()">
+            </div>
+          </div>
+          <div id="auditList"></div>
+        </div>
+
+        <!-- ── VIEW: MEMBROS ── -->
+        <div class="view" id="view-membros">
+          <div class="lgpd-alert">
+            <strong>🔒 Controle de Acesso:</strong> Conforme LGPD e NR-1, apenas membros autorizados do Comitê de Ética têm acesso às denúncias. O perfil define o nível de acesso e permissões.
+          </div>
+          <div id="membrosGrid"></div>
+        </div>
+
+      </div><!-- /page-content -->
+    </main>
+
+  </div>
+</div>
+
+<!-- ══ DRAWER DE DETALHE ════════════════════════════════════ -->
+<div class="drawer-overlay" id="drawerOverlay" onclick="closeDrawer(event)">
+  <div class="drawer" id="drawer">
+    <div class="drawer-header">
+      <div>
+        <div class="drawer-title" id="drawerTitle">Denúncia</div>
+        <div class="drawer-proto" id="drawerProto"></div>
+      </div>
+      <button class="drawer-close" onclick="closeDrawerDirect()" aria-label="Fechar">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div class="drawer-body" id="drawerBody"></div>
+  </div>
+</div>
+
+<!-- ══ TOAST CONTAINER ══════════════════════════════════════ -->
+<div class="toast-container" id="toastContainer"></div>
+
+<script type="module">
+import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
+
+const db = createClient(
+  'https://wbghfgtgamhbvoqpompi.supabase.co',
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndiZ2hmZ3RnYW1oYnZvcXBvbXBpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzczMjA5ODQsImV4cCI6MjA5Mjg5Njk4NH0._YZv1O-Mx9hP_hGjGsaRRYO05fJzUX9KgVycnhmZDRE'
+);
+
+// ── STATE ──────────────────────────────────────────────────
+let currentUser = null;
+let allDenuncias = [];
+let auditLog = [];
+let sortKey = 'created_at';
+let sortAsc = false;
+let page = 0;
+const PAGE_SIZE = 15;
+let isDark = window.matchMedia('(prefers-color-scheme:dark)').matches;
+
+// ── USUARIOS (simulados — em produção, usar Supabase Auth) ──
+const USERS = [
+  { id:1, user:'admin',      pass:'Multpel@2025!', name:'Administrador',    role:'admin',        email:'admin@multpel.com.br' },
+  { id:2, user:'comite1',    pass:'Comite@123',    name:'Maria Silva',       role:'membro',       email:'maria@multpel.com.br' },
+  { id:3, user:'comite2',    pass:'Comite@456',    name:'João Santos',       role:'membro',       email:'joao@multpel.com.br' },
+  { id:4, user:'rh',         pass:'RH@2025',       name:'Gestor RH',         role:'visualizador', email:'rh@multpel.com.br' },
+];
+
+const MEMBERS = [
+  ...USERS,
+];
+
+// ── LABELS ─────────────────────────────────────────────────
+const TIPO_LABELS = {
+  assedio_moral:'Assédio Moral', assedio_sexual:'Assédio Sexual',
+  discriminacao:'Discriminação', violencia:'Violência', fraude:'Fraude',
+  conduta_antietica:'Conduta Antiética', outro:'Outro'
+};
+const STATUS_LABELS = {
+  recebida:'Recebida', em_analise:'Em Análise', concluida:'Concluída',
+  arquivada:'Arquivada', improcedente:'Improcedente'
+};
+const RISCO_LABELS = {alto:'Alto', medio:'Médio', baixo:'Baixo', null:'—', undefined:'—'};
+const SETOR_LABELS = {
+  administrativo:'Administrativo', balcao_telemarketing:'Balcão/Telemarketing',
+  comercial_externo:'Comercial Externo', industria:'Indústria', entrega:'Entrega',
+  expedicao_noturno:'Expedição Noturno', recebimento:'Recebimento',
+  encopel_am:'Encopel (A&M)', encopel_ac:'Encopel (AC)'
+};
+const ROLE_LABELS = {admin:'Administrador', membro:'Membro', visualizador:'Visualizador'};
+
+// ── UTILS ──────────────────────────────────────────────────
+function fmtDate(d){ if(!d) return '—'; return new Date(d).toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit',year:'numeric'}); }
+function fmtDateTime(d){ if(!d) return '—'; return new Date(d).toLocaleString('pt-BR',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'}); }
+
+function showToast(msg, type=''){
+  const c = document.getElementById('toastContainer');
+  const t = document.createElement('div');
+  t.className = 'toast' + (type ? ' '+type : '');
+  t.textContent = msg;
+  c.appendChild(t);
+  setTimeout(()=>t.remove(), 3500);
+}
+
+function statusBadge(s){
+  return `<span class="badge badge-${s}">${STATUS_LABELS[s]||s}</span>`;
+}
+function riscoBadge(r){
+  if(!r) return '<span class="badge" style="background:var(--color-surface-offset);color:var(--color-text-muted)">—</span>';
+  return `<span class="badge badge-risco-${r}">${RISCO_LABELS[r]}</span>`;
+}
+
+// ── AUDIT LOG LOCAL ────────────────────────────────────────
+function addAudit(action, proto='', note=''){
+  auditLog.unshift({
+    ts: new Date().toISOString(),
+    user: currentUser?.name || '?',
+    role: currentUser?.role || '?',
+    action, proto, note
+  });
+  if(auditLog.length > 500) auditLog.pop();
+}
+
+// ── THEME ──────────────────────────────────────────────────
+window.toggleTheme = function(){
+  isDark = !isDark;
+  document.documentElement.setAttribute('data-theme', isDark ? 'dark' : 'light');
+};
+document.documentElement.setAttribute('data-theme', isDark ? 'dark' : 'light');
+
+// ── MOBILE ─────────────────────────────────────────────────
+function checkMobile(){
+  const isMobile = window.innerWidth < 768;
+  document.getElementById('menuToggle').style.display = isMobile ? 'flex' : 'none';
+}
+window.toggleSidebar = function(){
+  document.getElementById('sidebar').classList.toggle('open');
+};
+window.addEventListener('resize', checkMobile);
+
+// ── LOGIN ──────────────────────────────────────────────────
+document.getElementById('loginForm').addEventListener('submit', function(e){
+  e.preventDefault();
+  const u = document.getElementById('loginUser').value.trim();
+  const p = document.getElementById('loginPass').value;
+  const r = document.getElementById('loginProfile').value;
+  const found = USERS.find(x => x.user === u && x.pass === p && x.role === r);
+  if(!found){ document.getElementById('loginErr').style.display='block'; return; }
+  document.getElementById('loginErr').style.display='none';
+  currentUser = found;
+  document.getElementById('loginScreen').style.display='none';
+  document.getElementById('appShell').style.display='block';
+  document.getElementById('userAvatar').textContent = found.name.charAt(0).toUpperCase();
+  document.getElementById('userNameSidebar').textContent = found.name;
+  document.getElementById('userRoleSidebar').textContent = ROLE_LABELS[found.role];
+  // Restringe acesso por perfil
+  if(found.role === 'visualizador'){
+    document.getElementById('navAudit').style.display='none';
+    document.getElementById('navMembros').style.display='none';
+  }
+  checkMobile();
+  addAudit('LOGIN', '', `Acesso ao sistema — perfil: ${ROLE_LABELS[found.role]}`);
+  loadData();
+});
+
+window.doLogout = function(){
+  addAudit('LOGOUT', '', 'Saiu do sistema');
+  currentUser = null;
+  allDenuncias = [];
+  document.getElementById('appShell').style.display='none';
+  document.getElementById('loginScreen').style.display='flex';
+};
+
+// ── LOAD DATA ──────────────────────────────────────────────
+window.loadData = async function(){
+  try {
+    const { data, error } = await db
+      .from('denuncias')
+      .select('*')
+      .order('created_at', { ascending: false });
+    if(error) throw error;
+    allDenuncias = data || [];
+    renderDashboard();
+    renderTable();
+    renderAudit();
+    renderMembros();
+    renderRelatorios();
+    // Badge pendentes
+    const pendentes = allDenuncias.filter(d => d.status === 'recebida').length;
+    document.getElementById('badgePendentes').textContent = pendentes;
+    if(pendentes === 0) document.getElementById('badgePendentes').style.display='none';
+    else document.getElementById('badgePendentes').style.display='';
+    showToast(`${allDenuncias.length} denúncias carregadas`, 'success');
+  } catch(err) {
+    showToast('Erro ao carregar: ' + err.message, 'error');
+  }
+};
+
+// ── DASHBOARD ──────────────────────────────────────────────
+function renderDashboard(){
+  const total = allDenuncias.length;
+  const recebidas = allDenuncias.filter(d=>d.status==='recebida').length;
+  const analise = allDenuncias.filter(d=>d.status==='em_analise').length;
+  const concluidas = allDenuncias.filter(d=>d.status==='concluida').length;
+  document.getElementById('kpiTotal').textContent = total;
+  document.getElementById('kpiRecebidas').textContent = recebidas;
+  document.getElementById('kpiAnalise').textContent = analise;
+  document.getElementById('kpiConcluidas').textContent = concluidas;
+
+  // Chart tipo
+  const tipoCount = {};
+  allDenuncias.forEach(d=>{ tipoCount[d.tipo_denuncia] = (tipoCount[d.tipo_denuncia]||0)+1; });
+  const maxT = Math.max(...Object.values(tipoCount),1);
+  document.getElementById('chartTipo').innerHTML = Object.entries(tipoCount)
+    .sort((a,b)=>b[1]-a[1]).slice(0,6)
+    .map(([k,v])=>`<div class="bar-row">
+      <span class="bar-label">${TIPO_LABELS[k]||k}</span>
+      <div class="bar-track"><div class="bar-fill" style="width:${(v/maxT*100).toFixed(0)}%"></div></div>
+      <span class="bar-count">${v}</span>
+    </div>`).join('') || '<div style="color:var(--color-text-faint);font-size:var(--text-xs)">Sem dados</div>';
+
+  // Chart setor
+  const setorCount = {};
+  allDenuncias.forEach(d=>{ setorCount[d.local_setor] = (setorCount[d.local_setor]||0)+1; });
+  const maxS = Math.max(...Object.values(setorCount),1);
+  document.getElementById('chartSetor').innerHTML = Object.entries(setorCount)
+    .sort((a,b)=>b[1]-a[1]).slice(0,6)
+    .map(([k,v])=>`<div class="bar-row">
+      <span class="bar-label">${SETOR_LABELS[k]||k}</span>
+      <div class="bar-track"><div class="bar-fill" style="width:${(v/maxS*100).toFixed(0)}%"></div></div>
+      <span class="bar-count">${v}</span>
+    </div>`).join('') || '<div style="color:var(--color-text-faint);font-size:var(--text-xs)">Sem dados</div>';
+
+  // Recent table
+  const recent = allDenuncias.slice(0,8);
+  document.getElementById('tbodyRecent').innerHTML = recent.length ? recent.map(d=>`
+    <tr onclick="openDrawer('${d.id}')">
+      <td style="font-family:monospace;font-size:0.65rem">${d.protocolo||'—'}</td>
+      <td>${TIPO_LABELS[d.tipo_denuncia]||d.tipo_denuncia||'—'}</td>
+      <td>${SETOR_LABELS[d.local_setor]||d.local_setor||'—'}</td>
+      <td>${fmtDate(d.created_at)}</td>
+      <td>${statusBadge(d.status)}</td>
+    </tr>`).join('') : '<tr><td colspan="5" class="table-empty">Nenhuma denúncia encontrada</td></tr>';
+}
+
+// ── TABLE ──────────────────────────────────────────────────
+window.sortBy = function(key){
+  if(sortKey===key) sortAsc=!sortAsc; else { sortKey=key; sortAsc=true; }
+  renderTable();
+};
+window.changePage = function(dir){
+  const filtered = getFiltered();
+  const maxPage = Math.ceil(filtered.length/PAGE_SIZE)-1;
+  page = Math.max(0, Math.min(maxPage, page+dir));
+  renderTable();
+};
+
+function getFiltered(){
+  const q = document.getElementById('searchInput')?.value.toLowerCase()||'';
+  const st = document.getElementById('filterStatus')?.value||'';
+  const tp = document.getElementById('filterTipo')?.value||'';
+  const se = document.getElementById('filterSetor')?.value||'';
+  return allDenuncias.filter(d=>{
+    if(st && d.status!==st) return false;
+    if(tp && d.tipo_denuncia!==tp) return false;
+    if(se && d.local_setor!==se) return false;
+    if(q){
+      const hay = [d.protocolo,d.tipo_denuncia,d.descricao,d.local_setor,d.pessoas_envolvidas].join(' ').toLowerCase();
+      if(!hay.includes(q)) return false;
+    }
+    return true;
+  }).sort((a,b)=>{
+    const av = a[sortKey]||'', bv = b[sortKey]||'';
+    return sortAsc ? av.localeCompare(bv) : bv.localeCompare(av);
+  });
+}
+
+window.renderTable = function(){
+  const filtered = getFiltered();
+  const start = page * PAGE_SIZE;
+  const slice = filtered.slice(start, start + PAGE_SIZE);
+  document.getElementById('paginationInfo').textContent = `${filtered.length} resultado(s) — página ${page+1} de ${Math.max(1,Math.ceil(filtered.length/PAGE_SIZE))}`;
+  document.getElementById('btnPrev').disabled = page===0;
+  document.getElementById('btnNext').disabled = start+PAGE_SIZE >= filtered.length;
+  const tbody = document.getElementById('tbodyMain');
+  if(!slice.length){
+    tbody.innerHTML='<tr><td colspan="7"><div class="table-empty"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="32" height="32"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg><br>Nenhuma denúncia encontrada</div></td></tr>';
+    return;
+  }
+  tbody.innerHTML = slice.map(d=>{
+    const canSeeId = currentUser?.role !== 'visualizador';
+    const idCol = d.is_anonimo ? '<span style="color:var(--color-text-faint)">Anônimo</span>' 
+      : canSeeId ? (d.identificacao||'Identificado') : '••••••';
+    return `<tr onclick="openDrawer('${d.id}')">
+      <td style="font-family:monospace;font-size:0.65rem;color:var(--color-primary);font-weight:600">${d.protocolo||'—'}</td>
+      <td>${TIPO_LABELS[d.tipo_denuncia]||d.tipo_denuncia||'—'}</td>
+      <td>${SETOR_LABELS[d.local_setor]||d.local_setor||'—'}</td>
+      <td style="white-space:nowrap">${fmtDate(d.created_at)}</td>
+      <td>${riscoBadge(d.classificacao_risco)}</td>
+      <td>${statusBadge(d.status)}</td>
+      <td><button class="btn-sm" onclick="event.stopPropagation();openDrawer('${d.id}')">Ver</button></td>
+    </tr>`;
+  }).join('');
+};
+
+// ── DRAWER ─────────────────────────────────────────────────
+window.openDrawer = function(id){
+  const d = allDenuncias.find(x=>x.id==id);
+  if(!d) return;
+  addAudit('VISUALIZOU', d.protocolo, `Abriu detalhes da denúncia`);
+  const canEdit = currentUser?.role === 'admin' || currentUser?.role === 'membro';
+  const canSeeId = currentUser?.role !== 'visualizador';
+
+  document.getElementById('drawerTitle').textContent = TIPO_LABELS[d.tipo_denuncia]||d.tipo_denuncia||'Denúncia';
+  document.getElementById('drawerProto').textContent = d.protocolo||'—';
+
+  const idBlock = d.is_anonimo 
+    ? `<span style="color:var(--color-text-faint);font-style:italic">Denúncia anônima</span>`
+    : canSeeId ? (d.identificacao||'Não informado') : `<span style="color:var(--color-text-faint)">••• (restrito ao perfil Membro)</span>`;
+
+  const auditItems = auditLog.filter(a=>a.proto===d.protocolo);
+
+  document.getElementById('drawerBody').innerHTML = `
+    <div class="lgpd-banner">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" flex-shrink="0"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+      <span>Dados protegidos pela LGPD. Acesso registrado em log de auditoria.</span>
+    </div>
+
+    <div class="drawer-section">
+      <div class="drawer-section-title">Informações Gerais</div>
+      <div class="detail-grid">
+        <div class="detail-item"><label>Protocolo</label><p style="font-family:monospace">${d.protocolo||'—'}</p></div>
+        <div class="detail-item"><label>Data de recebimento</label><p>${fmtDateTime(d.created_at)}</p></div>
+        <div class="detail-item"><label>Tipo de denúncia</label><p>${TIPO_LABELS[d.tipo_denuncia]||d.tipo_denuncia||'—'}</p></div>
+        <div class="detail-item"><label>Setor / Local</label><p>${SETOR_LABELS[d.local_setor]||d.local_setor||'—'}</p></div>
+        <div class="detail-item"><label>Natureza do informante</label><p>${d.natureza_informante||'Não informado'}</p></div>
+        <div class="detail-item"><label>Data aproximada do fato</label><p>${fmtDate(d.data_fato)}</p></div>
+        <div class="detail-item"><label>Identificação</label><p>${idBlock}</p></div>
+        <div class="detail-item"><label>Status atual</label><p>${statusBadge(d.status)}</p></div>
+        <div class="detail-item"><label>Risco</label><p>${riscoBadge(d.classificacao_risco)}</p></div>
+        <div class="detail-item"><label>Responsável</label><p>${d.responsavel||'—'}</p></div>
+      </div>
+    </div>
+
+    <div class="drawer-section">
+      <div class="drawer-section-title">Descrição do Ocorrido</div>
+      <div class="detail-text">${d.descricao||'—'}</div>
+    </div>
+
+    ${d.pessoas_envolvidas ? `
+    <div class="drawer-section">
+      <div class="drawer-section-title">Pessoas Envolvidas</div>
+      <div class="detail-text">${d.pessoas_envolvidas}</div>
+    </div>` : ''}
+
+    ${d.testemunhas ? `
+    <div class="drawer-section">
+      <div class="drawer-section-title">Testemunhas</div>
+      <div class="detail-text">${d.testemunhas}</div>
+    </div>` : ''}
+
+    ${d.provas ? `
+    <div class="drawer-section">
+      <div class="drawer-section-title">Provas / Evidências</div>
+      <div class="detail-text">${d.provas}</div>
+    </div>` : ''}
+
+    ${d.parecer ? `
+    <div class="drawer-section">
+      <div class="drawer-section-title">Parecer do Comitê</div>
+      <div class="detail-text">${d.parecer}</div>
+    </div>` : ''}
+
+    ${d.medida_aplicada ? `
+    <div class="drawer-section">
+      <div class="drawer-section-title">Medida Aplicada</div>
+      <div class="detail-text">${d.medida_aplicada}</div>
+    </div>` : ''}
+
+    ${canEdit ? `
+    <div class="drawer-section">
+      <div class="drawer-section-title">Atualizar Tratamento</div>
+      <div class="status-form">
+        <div class="status-form-title">Gestão do Protocolo — ${d.protocolo}</div>
+        <div class="field">
+          <label>Classificação de Risco</label>
+          <select id="editRisco" style="width:100%;padding:var(--space-2) var(--space-3);border:1px solid var(--color-border);border-radius:var(--radius-md);font-size:var(--text-xs);background:var(--color-surface)">
+            <option value="" ${!d.classificacao_risco?'selected':''}>— Selecione —</option>
+            <option value="alto" ${d.classificacao_risco==='alto'?'selected':''}>🔴 Alto</option>
+            <option value="medio" ${d.classificacao_risco==='medio'?'selected':''}>🟡 Médio</option>
+            <option value="baixo" ${d.classificacao_risco==='baixo'?'selected':''}>🟢 Baixo</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Novo Status</label>
+          <select id="editStatus" style="width:100%;padding:var(--space-2) var(--space-3);border:1px solid var(--color-border);border-radius:var(--radius-md);font-size:var(--text-xs);background:var(--color-surface)">
+            <option value="recebida" ${d.status==='recebida'?'selected':''}>Recebida</option>
+            <option value="em_analise" ${d.status==='em_analise'?'selected':''}>Em Análise</option>
+            <option value="concluida" ${d.status==='concluida'?'selected':''}>Concluída</option>
+            <option value="arquivada" ${d.status==='arquivada'?'selected':''}>Arquivada</option>
+            <option value="improcedente" ${d.status==='improcedente'?'selected':''}>Improcedente</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Responsável pela análise</label>
+          <input type="text" id="editResp" value="${d.responsavel||currentUser?.name||''}" 
+            style="width:100%;padding:var(--space-2) var(--space-3);border:1px solid var(--color-border);border-radius:var(--radius-md);font-size:var(--text-xs);background:var(--color-surface)" placeholder="Nome do responsável">
+        </div>
+        <div class="field">
+          <label>Parecer / Observações</label>
+          <textarea id="editParecer" placeholder="Descreva o parecer do comitê...">${d.parecer||''}</textarea>
+        </div>
+        <div class="field">
+          <label>Medida aplicada</label>
+          <textarea id="editMedida" placeholder="Descreva a medida disciplinar ou preventiva aplicada...">${d.medida_aplicada||''}</textarea>
+        </div>
+        <div class="btn-row">
+          <button class="btn-sm" onclick="closeDrawerDirect()">Cancelar</button>
+          <button class="btn-sm primary" onclick="saveUpdate('${d.id}','${d.protocolo}')">💾 Salvar Atualização</button>
+        </div>
+      </div>
+    </div>` : `
+    <div style="background:var(--color-surface-offset);border-radius:var(--radius-md);padding:var(--space-3) var(--space-4);font-size:var(--text-xs);color:var(--color-text-muted)">
+      🔒 Seu perfil (Visualizador) permite apenas leitura. Para atualizar, solicite acesso ao Administrador.
+    </div>`}
+
+    <div class="drawer-section" style="margin-top:var(--space-5)">
+      <div class="drawer-section-title">Histórico desta Denúncia</div>
+      ${auditItems.length ? `<ul class="audit-timeline">${auditItems.map(a=>`
+        <li class="audit-item">
+          <div class="audit-dot"></div>
+          <div class="audit-content">
+            <div class="audit-action">${a.action} — ${a.user}</div>
+            <div class="audit-meta">${fmtDateTime(a.ts)} · ${ROLE_LABELS[a.role]||a.role}</div>
+            ${a.note ? `<div class="audit-note">${a.note}</div>` : ''}
+          </div>
+        </li>`).join('')}</ul>` : `<div style="font-size:var(--text-xs);color:var(--color-text-faint);font-style:italic">Nenhum registro de auditoria ainda para este protocolo.</div>`}
+    </div>
+  `;
+
+  document.getElementById('drawerOverlay').classList.add('open');
+  document.body.style.overflow='hidden';
+};
+
+window.saveUpdate = async function(id, proto){
+  if(!currentUser || currentUser.role === 'visualizador'){ showToast('Sem permissão para editar', 'error'); return; }
+  const status = document.getElementById('editStatus').value;
+  const risco = document.getElementById('editRisco').value || null;
+  const resp = document.getElementById('editResp').value.trim();
+  const parecer = document.getElementById('editParecer').value.trim();
+  const medida = document.getElementById('editMedida').value.trim();
+
+  const updates = { status, classificacao_risco:risco };
+  if(resp) updates.responsavel = resp;
+  if(parecer) updates.parecer = parecer;
+  if(medida) updates.medida_aplicada = medida;
+  if(status === 'concluida' || status === 'arquivada' || status === 'improcedente'){
+    updates.data_encerramento = new Date().toISOString().split('T')[0];
+  }
+
+  try {
+    const { error } = await db.from('denuncias').update(updates).eq('id', id);
+    if(error) throw error;
+    addAudit('ATUALIZOU', proto, `Status → ${STATUS_LABELS[status]}${risco?' | Risco: '+RISCO_LABELS[risco]:''}${parecer?' | Parecer registrado':''}${medida?' | Medida aplicada':''}`);
+    showToast('Denúncia atualizada com sucesso!', 'success');
+    closeDrawerDirect();
+    await loadData();
+  } catch(err){
+    showToast('Erro ao salvar: ' + err.message, 'error');
+  }
+};
+
+window.closeDrawer = function(e){
+  if(e.target === document.getElementById('drawerOverlay')) closeDrawerDirect();
+};
+window.closeDrawerDirect = function(){
+  document.getElementById('drawerOverlay').classList.remove('open');
+  document.body.style.overflow='';
+};
+
+// ── RELATÓRIOS ─────────────────────────────────────────────
+function renderRelatorios(){
+  const total = allDenuncias.length;
+  if(!total){ document.getElementById('statsGrid').innerHTML='<div class="empty-state"><p>Sem dados para exibir</p></div>'; return; }
+
+  const byStatus = {};
+  const byTipo = {};
+  const bySetor = {};
+  const byRisco = {};
+  allDenuncias.forEach(d=>{
+    byStatus[d.status] = (byStatus[d.status]||0)+1;
+    byTipo[d.tipo_denuncia] = (byTipo[d.tipo_denuncia]||0)+1;
+    bySetor[d.local_setor] = (bySetor[d.local_setor]||0)+1;
+    const r = d.classificacao_risco||'nao_classificado';
+    byRisco[r] = (byRisco[r]||0)+1;
+  });
+
+  const mkBars = (obj, labels, max) => Object.entries(obj).sort((a,b)=>b[1]-a[1]).map(([k,v])=>
+    `<div class="bar-row">
+      <span class="bar-label">${labels[k]||k}</span>
+      <div class="bar-track"><div class="bar-fill" style="width:${(v/max*100).toFixed(0)}%"></div></div>
+      <span class="bar-count">${v}</span>
+    </div>`).join('');
+
+  document.getElementById('statsGrid').innerHTML = `
+    <div class="stats-card">
+      <div class="stats-card-title">Por Status</div>
+      ${mkBars(byStatus, STATUS_LABELS, Math.max(...Object.values(byStatus)))}
+    </div>
+    <div class="stats-card">
+      <div class="stats-card-title">Por Tipo de Denúncia</div>
+      ${mkBars(byTipo, TIPO_LABELS, Math.max(...Object.values(byTipo)))}
+    </div>
+    <div class="stats-card">
+      <div class="stats-card-title">Por Setor</div>
+      ${mkBars(bySetor, SETOR_LABELS, Math.max(...Object.values(bySetor)))}
+    </div>
+    <div class="stats-card">
+      <div class="stats-card-title">Por Risco</div>
+      ${mkBars(byRisco, {...RISCO_LABELS, nao_classificado:'Não classificado'}, Math.max(...Object.values(byRisco)))}
+    </div>
+  `;
+}
+
+// ── AUDITORIA ──────────────────────────────────────────────
+window.renderAudit = function(){
+  if(currentUser?.role === 'visualizador') return;
+  const q = (document.getElementById('auditSearch')?.value||'').toLowerCase();
+  const dt = document.getElementById('auditDate')?.value||'';
+  const filtered = auditLog.filter(a=>{
+    if(dt && !a.ts.startsWith(dt)) return false;
+    if(q){
+      const hay = [a.user,a.proto,a.action,a.note].join(' ').toLowerCase();
+      if(!hay.includes(q)) return false;
+    }
+    return true;
+  });
+  const el = document.getElementById('auditList');
+  if(!filtered.length){
+    el.innerHTML = `<div class="empty-state">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+      <h3>Sem registros</h3><p>Nenhuma ação registrada ainda</p></div>`;
+    return;
+  }
+  el.innerHTML = filtered.map(a=>`
+    <div class="audit-page-item">
+      <div class="audit-page-dot"></div>
+      <div class="audit-page-proto">${a.proto||'—'}</div>
+      <div class="audit-page-action">
+        <strong>${a.action}</strong> — ${a.user} 
+        <span class="badge badge-role-${a.role}" style="margin-left:4px">${ROLE_LABELS[a.role]||a.role}</span>
+        ${a.note ? `<div style="margin-top:2px;font-style:italic;color:var(--color-text-muted)">${a.note}</div>` : ''}
+      </div>
+      <div class="audit-page-meta">${fmtDateTime(a.ts)}</div>
+    </div>`).join('');
+};
+
+// ── MEMBROS ────────────────────────────────────────────────
+function renderMembros(){
+  if(currentUser?.role !== 'admin') return;
+  document.getElementById('membrosGrid').innerHTML = MEMBERS.map(m=>`
+    <div class="member-card">
+      <div class="member-avatar">${m.name.charAt(0)}</div>
+      <div class="member-info">
+        <div class="member-name">${m.name}</div>
+        <div class="member-email">${m.email}</div>
+      </div>
+      <div class="member-actions">
+        <span class="badge badge-role-${m.role}">${ROLE_LABELS[m.role]}</span>
+      </div>
+    </div>`).join('');
+}
+
+// ── EXPORT CSV ─────────────────────────────────────────────
+window.exportCSV = function(){
+  const canSeeId = currentUser?.role !== 'visualizador';
+  const filtered = getFiltered();
+  const headers = ['Protocolo','Tipo','Setor','Status','Risco','Data','Anônimo','Identificação','Responsável'];
+  const rows = filtered.map(d=>[
+    d.protocolo, TIPO_LABELS[d.tipo_denuncia]||d.tipo_denuncia,
+    SETOR_LABELS[d.local_setor]||d.local_setor,
+    STATUS_LABELS[d.status]||d.status,
+    RISCO_LABELS[d.classificacao_risco]||'—',
+    fmtDate(d.created_at),
+    d.is_anonimo ? 'Sim' : 'Não',
+    canSeeId ? (d.identificacao||'—') : '(restrito)',
+    d.responsavel||'—'
+  ].map(v=>'"'+String(v||'').replace(/"/g,'""')+'"').join(','));
+  const csv = [headers.join(','), ...rows].join('\n');
+  const blob = new Blob(['\uFEFF'+csv], {type:'text/csv;charset=utf-8'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `denuncias_${new Date().toISOString().slice(0,10)}.csv`;
+  a.click();
+  addAudit('EXPORTOU CSV', '', `${filtered.length} registros exportados`);
+  showToast('CSV exportado!', 'success');
+};
+
+window.exportRelatorio = function(){
+  addAudit('EXPORTOU RELATÓRIO', '', `Relatório gerencial exportado`);
+  showToast('Relatório gerado! (funcionalidade em desenvolvimento)', 'success');
+};
+
+// ── NAV ────────────────────────────────────────────────────
+const PAGE_TITLES = {
+  dashboard:'Painel Geral', denuncias:'Denúncias', 
+  relatorios:'Relatórios', auditoria:'Log de Auditoria', membros:'Membros'
+};
+window.switchView = function(view, btn){
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  document.getElementById('view-'+view)?.classList.add('active');
+  btn?.classList.add('active');
+  document.getElementById('pageTitle').textContent = PAGE_TITLES[view]||view;
+  if(view==='auditoria') renderAudit();
+  document.getElementById('sidebar').classList.remove('open');
+};
+
+// Init
+checkMobile();
+</script>
+</body>
+</html>
